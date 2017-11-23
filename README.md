@@ -5,6 +5,6 @@ A simple and minimalist bookmark manager app for Android. Bookmarks can be added
 So far this only a prototype. The idea is that the sharemark app can save anything as a bookmark that gets shared to it via Android share intents.
 
 Usage: 
-1. In an external app that has an Android share feature (like for example Google Play Store, Facebook etc.) click the share button.
+1. In an external app that has an Android share feature (like for example Chrome Browser, Google Play Store, Facebook etc.) click the share button.
 2. In the chooser select "Sharemarks" to share the bookmark with this app
 3. Shared bookmark appears in the list. On click the shared bookmark link will be opened. 
