@@ -39,6 +39,8 @@ class MarksDataSource(context: Context) : MarksContract.Model {
         return cupboard(db).update(MarkItem::class.java, values,
                 "_id = ?", item._id.toString())
     }
-    //endregion
+
+    override fun dropItem(item: MarkItem): Boolean = cupboard(db).delete(item)
+//endregion
 
 }

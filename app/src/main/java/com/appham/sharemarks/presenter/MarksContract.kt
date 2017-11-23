@@ -22,7 +22,7 @@ interface MarksContract {
         fun updateDrawerItem(item: MarkItem)
         fun syncMarksFromDb(deleted: Int)
         fun queryMarksByDomain(domain: String)
-        fun setMarkDeleted(item: MarkItem): Int
+        fun setMarkDeleted(item: MarkItem): Boolean
     }
 
     interface Model {
@@ -32,5 +32,6 @@ interface MarksContract {
         fun getMarksByDomain(domain: String): MutableList<MarkItem>
         fun putMark(item: MarkItem): Long
         fun setMarkDeleted(item: MarkItem): Int
+        fun dropItem(item: MarkItem): Boolean
     }
 }

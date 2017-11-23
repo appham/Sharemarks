@@ -73,10 +73,13 @@ class MarksPresenter(private val view: MarksContract.View,
         view.notifyDataChanged()
     }
 
-    override fun setMarkDeleted(item: MarkItem): Int {
+    override fun setMarkDeleted(item: MarkItem): Boolean {
         view.removeMarkItem(item)
         updateDrawerItems()
-        return dataSource.setMarkDeleted(item)
+        if (item.deleted) {
+            return dataSource.dropItem(item)
+        }
+        return dataSource.setMarkDeleted(item) > 0
     }
 //endregion
 
