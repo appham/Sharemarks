@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="CardMarkItem">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:padding">2dp</item>
+    </style>
+
+    <style name="LayoutMarkItem">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">2dp</item>
+    </style>
+
+    <style name="LayoutMarkContent">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_below">@id/txtTitle</item>
+        <item name="android:padding">2dp</item>
+    </style>
+
+    <style name="ImageMark">
+        <!--<item name="android:layout_width">80dp</item>-->
+        <!--<item name="android:layout_height">80dp</item>-->
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <!--<item name="android:layout_alignParentLeft">true</item>-->
+        <!--<item name="android:layout_below">@id/txtTitle</item>-->
+        <item name="android:padding">4dp</item>
+    </style>
+
+    <style name="TextMarkTitle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_alignParentTop">true</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:padding">4dp</item>
+    </style>
+
+    <style name="TextMarkContent">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <!--<item name="android:layout_below">@id/txtTitle</item>-->
+        <!--<item name="android:layout_toRightOf">@id/imgMark</item>-->
+        <!--<item name="android:layout_alignTop">@id/imgMark</item>-->
+        <item name="android:lines">3</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:padding">4dp</item>
+    </style>
+
+    <style name="TextMarkReferrer">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <!--<item name="android:layout_alignParentBottom">true</item>-->
+        <item name="android:layout_below">@id/layMarkContent
+        </item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:textColor">@android:color/darker_gray</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">start</item>
+        <item name="android:padding">4dp</item>
+    </style>
+
+</resources>
