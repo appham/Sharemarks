@@ -33,9 +33,9 @@ class MarksDataSource(context: Context) : MarksContract.Model {
 
     override fun putMark(item: MarkItem): Long = cupboard(db).put(item)
 
-    override fun setMarkDeleted(item: MarkItem): Int {
+    override fun setMarkDeleted(item: MarkItem, toDelete: Boolean): Int {
         val values = ContentValues(1)
-        values.put("deleted", true)
+        values.put("deleted", toDelete)
         return cupboard(db).update(MarkItem::class.java, values,
                 "_id = ?", item._id.toString())
     }

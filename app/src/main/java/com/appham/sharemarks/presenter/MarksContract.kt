@@ -13,6 +13,7 @@ interface MarksContract {
         fun removeMarkItem(item: MarkItem)
         fun addDrawerItem(item: String)
         fun notifyDataChanged()
+        fun showToast(resId: Int)
     }
 
     interface Presenter {
@@ -22,7 +23,7 @@ interface MarksContract {
         fun updateDrawerItem(item: MarkItem)
         fun syncMarksFromDb(deleted: Int)
         fun queryMarksByDomain(domain: String)
-        fun setMarkDeleted(item: MarkItem): Boolean
+        fun setMarkDeleted(item: MarkItem, toDelete: Boolean): Boolean
     }
 
     interface Model {
@@ -31,7 +32,7 @@ interface MarksContract {
         fun getMarks(deleted: Int): MutableList<MarkItem>
         fun getMarksByDomain(domain: String): MutableList<MarkItem>
         fun putMark(item: MarkItem): Long
-        fun setMarkDeleted(item: MarkItem): Int
+        fun setMarkDeleted(item: MarkItem, toDelete: Boolean): Int
         fun dropItem(item: MarkItem): Boolean
     }
 }

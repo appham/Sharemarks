@@ -2,6 +2,7 @@ package com.appham.sharemarks.presenter
 
 import android.content.Intent
 import android.util.Log
+import com.appham.sharemarks.R
 import com.appham.sharemarks.model.MarkItem
 import com.appham.sharemarks.model.MarksDataSource
 import com.appham.sharemarks.utils.Utils
@@ -73,13 +74,21 @@ class MarksPresenter(private val view: MarksContract.View,
         view.notifyDataChanged()
     }
 
-    override fun setMarkDeleted(item: MarkItem): Boolean {
+    override fun setMarkDeleted(item: MarkItem, toDelete: Boolean): Boolean {
         view.removeMarkItem(item)
         updateDrawerItems()
-        if (item.deleted) {
+        if (item.deleted && toDelete) {
             return dataSource.dropItem(item)
         }
-        return dataSource.setMarkDeleted(item) > 0
+
+        val isItemModified = dataSource.setMarkDeleted(item, toDelete) > 0
+        if (isItemModified && toDelete) {
+            view.showToast(R.string.mark_moved_to_deleted)
+        } else if (isItemModified && !toDelete) {
+            view.showToast(R.string.mark_undeleted)
+        }
+
+        return isItemModified
     }
 //endregion
 

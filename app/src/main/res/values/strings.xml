@@ -2,4 +2,8 @@
     <string name="app_name">Sharemarks</string>
     <string name="all">All</string>
     <string name="deleted">Deleted</string>
+    <string name="share_mark_no_options">There is no app available to share this</string>
+    <string name="share_mark">Share this mark</string>
+    <string name="mark_moved_to_deleted">Mark has been moved to deleted folder</string>
+    <string name="mark_undeleted">Mark has been restored from deleted folder</string>
 </resources>

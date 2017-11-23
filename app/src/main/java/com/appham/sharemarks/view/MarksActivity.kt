@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.view.SubMenu
 import android.view.View
+import android.widget.Toast
 import com.appham.sharemarks.R
 import com.appham.sharemarks.model.MarkItem
 import com.appham.sharemarks.model.MarksDataSource
@@ -112,6 +113,10 @@ class MarksActivity : AppCompatActivity(), MarksContract.View, NavigationView.On
 
     override fun notifyDataChanged() {
         runOnUiThread { marksFragment.getMarksAdapter().notifyDataSetChanged() }
+    }
+
+    override fun showToast(resId: Int) {
+        Toast.makeText(this, resId, Toast.LENGTH_LONG).show()
     }
     //endregion
 

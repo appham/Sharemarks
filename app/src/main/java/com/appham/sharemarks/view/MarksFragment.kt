@@ -1,6 +1,7 @@
 package com.appham.sharemarks.view
 
 import android.app.Fragment
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -22,6 +23,7 @@ class MarksFragment : Fragment() {
     private var marksList: RecyclerView? = null
     private var marksLayoutManager: LinearLayoutManager? = null
     private val marksAdapter = MarksAdapter()
+    private val marksActivity: MarksActivity by lazy { activity as MarksActivity }
 
     //region lifecycle methods
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -59,7 +61,24 @@ class MarksFragment : Fragment() {
                                 target: RecyclerView.ViewHolder): Boolean = false
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
-                (activity as MarksActivity).presenter.setMarkDeleted(viewHolder.itemView.tag as MarkItem)
+                val item = viewHolder.itemView.tag as MarkItem
+                if (swipeDir == ItemTouchHelper.LEFT) { //delete on left swipe
+                    marksActivity.presenter.setMarkDeleted(item, true)
+                } else if (item.deleted) { //right swipe for deleted item restores it
+                    marksActivity.presenter.setMarkDeleted(item, false)
+                } else { // right swipe on non-deleted item shares it
+                    try {
+                        val intent = Intent(Intent.ACTION_SEND)
+                        intent.type = "text/plain"
+                        intent.putExtra(Intent.EXTRA_SUBJECT, item.title)
+                        intent.putExtra(Intent.EXTRA_TEXT, item.content + " " + item.url)
+                        startActivity(Intent.createChooser(intent, getString(R.string.share_mark)))
+                    } catch (ex: android.content.ActivityNotFoundException) {
+                        marksActivity.showToast(R.string.share_mark_no_options)
+                    }
+
+                    marksAdapter.notifyItemChanged(viewHolder.adapterPosition)
+                }
             }
         }
 
