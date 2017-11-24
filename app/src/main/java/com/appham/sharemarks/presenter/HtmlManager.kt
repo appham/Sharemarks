@@ -19,9 +19,9 @@ class HtmlManager {
     private val TAG = "HtmlManager"
 
     companion object {
-        val userAgentStr: String = "user-agent-string"
+        var userAgentStr: String = "user-agent-string"
         fun initUserAgentStr(context: Context) {
-            Utils.buildUserAgentStr(context)
+            userAgentStr = Utils.buildUserAgentStr(context)
         }
     }
 
@@ -59,52 +59,32 @@ class HtmlManager {
         var imageUrl: String? = null
 
         // Look for the og:image declaration
-        val metaOgImage = doc.select("meta[property='og:image']")
-        if (metaOgImage != null) {
-            imageUrl = metaOgImage.attr("content")
-        }
-        Log.d(TAG, "imageUrl: " + imageUrl!!)
-        if (imageUrl != null && imageUrl.length > 0) {
+        imageUrl = doc.select("meta[property='og:image']")?.attr("content")
+        if (imageUrl != null && imageUrl.isNotEmpty()) {
             return getUrl(pageUrl, imageUrl)
         }
 
         // Look for meta itemprop image declaration
-        val itemPropImage = doc.select("meta[itemprop='image']")
-        if (itemPropImage != null) {
-            imageUrl = itemPropImage.attr("content")
-        }
-        Log.d(TAG, "imageUrl: " + imageUrl!!)
-        if (imageUrl != null && imageUrl.length > 0) {
+        imageUrl = doc.select("meta[itemprop='image']")?.attr("content")
+        if (imageUrl != null && imageUrl.isNotEmpty()) {
             return getUrl(pageUrl, imageUrl)
         }
 
         // Look for Apple touch icon declarations
-        val appleTouchImage = doc.select("link[rel='apple-touch-icon']")
-        if (appleTouchImage != null) {
-            imageUrl = appleTouchImage.attr("href")
-        }
-        Log.d(TAG, "imageUrl: " + imageUrl!!)
-        if (imageUrl != null && imageUrl.length > 0) {
+        imageUrl = doc.select("link[rel='apple-touch-icon']")?.attr("href")
+        if (imageUrl != null && imageUrl.isNotEmpty()) {
             return getUrl(pageUrl, imageUrl)
         }
 
         // Look for image icon link declaration
-        val iconImage = doc.select("link[rel='icon']")
-        if (iconImage != null) {
-            imageUrl = iconImage.attr("href")
-        }
-        Log.d(TAG, "imageUrl: " + imageUrl!!)
-        if (imageUrl != null && imageUrl.length > 0) {
+        imageUrl = doc.select("link[rel='icon']")?.attr("href")
+        if (imageUrl != null && imageUrl.isNotEmpty()) {
             return getUrl(pageUrl, imageUrl)
         }
 
         // Look for shortcut icon link declaration
-        val shortCutImage = doc.select("link[rel='shortcut icon']")
-        if (shortCutImage != null) {
-            imageUrl = shortCutImage.attr("href")
-        }
-        Log.d(TAG, "imageUrl: " + imageUrl!!)
-        if (imageUrl != null && imageUrl.length > 0) {
+        imageUrl = doc.select("link[rel='shortcut icon']")?.attr("href")
+        if (imageUrl != null && imageUrl.isNotEmpty()) {
             return getUrl(pageUrl, imageUrl)
         }
 
