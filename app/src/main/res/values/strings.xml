@@ -7,4 +7,5 @@
     <string name="mark_moved_to_deleted">Mark moved to trash</string>
     <string name="mark_restored">Mark restored </string>
     <string name="undo">Undo</string>
+    <string name="mark_dropped">Mark dropped permanently</string>
 </resources>

@@ -77,16 +77,23 @@ class MarksPresenter(private val view: MarksContract.View,
 
     override fun setMarkDeleted(item: MarkItem, toDelete: Boolean): Boolean {
 
-        if (item.deleted && toDelete) { //permanently drop item
-            removeItemView(item)
-            return dataSource.dropItem(item)
-        }
-
-        val isItemModified = dataSource.setMarkDeleted(item, toDelete) > 0
-        val undoAction = { view: View ->
+        val undoAction = { _: View ->
             setMarkDeleted(item, !toDelete)
             Unit
         }
+
+        if (item.deleted && toDelete) { //permanently drop item
+            removeItemView(item)
+            view.showSnackbar(R.string.mark_dropped, undoAction)
+            item.deleted = false
+            return dataSource.dropItem(item)
+        } else if (!item.deleted && !toDelete && view.isDeletedFilter()) { //restore dropped item
+            view.showSnackbar(R.string.mark_moved_to_deleted, undoAction)
+            item.deleted = true
+            return putAndShowItem(item) > 0
+        }
+
+        val isItemModified = dataSource.setMarkDeleted(item, toDelete) > 0
 
         if (isItemModified && toDelete) { //set item to deleted
             if (view.isDeletedFilter()) putAndShowItem(item) else removeItemView(item)
@@ -100,7 +107,7 @@ class MarksPresenter(private val view: MarksContract.View,
 
         return isItemModified
     }
-//endregion
+    //endregion
 
     private fun handleSendText(sharedText: String?, referrer: String?) {
         if (sharedText != null) {
@@ -119,7 +126,7 @@ class MarksPresenter(private val view: MarksContract.View,
     }
 
     private fun parseHtml(url: URL, item: MarkItem) {
-        val subscription = htmlManager.parseHtml(url, item)
+        htmlManager.parseHtml(url, item)
                 .subscribeOn(Schedulers.io())
                 .subscribe(
                         { parsedItem ->
@@ -127,7 +134,6 @@ class MarksPresenter(private val view: MarksContract.View,
                             putAndShowItem(parsedItem)
                         },
                         { e ->
-                            //                            Snackbar.make(news_list, e.message ?: "", Snackbar.LENGTH_LONG).show()
                             e.printStackTrace()
                             Log.e("MarksPresenter", "e: " + e)
                             putAndShowItem(item)
@@ -135,10 +141,10 @@ class MarksPresenter(private val view: MarksContract.View,
                 )
     }
 
-    private fun putAndShowItem(item: MarkItem) {
-        dataSource.putMark(item)
+    private fun putAndShowItem(item: MarkItem): Long {
         view.addMarkItem(item)
         updateDrawerItem(item)
+        return dataSource.putMark(item)
     }
 
 
@@ -147,16 +153,4 @@ class MarksPresenter(private val view: MarksContract.View,
         updateDrawerItems()
     }
 
-
-//    private fun buildMarkItem(sharedText: String, url: URL, drawable: BitmapDrawable?, referrer: String?): MarkItem {
-//
-//        val split = sharedText.replaceFirst(url.toString().toRegex(), "")
-//                .split("\\n+".toRegex(), 2).toTypedArray()
-//
-//        if (split.size > 1) {
-//            return MarkItem.create(split[0], split[1], referrer, url, null)
-//        } else {
-//            return MarkItem.create(sharedText, sharedText, referrer, url, null)
-//        }
-//    }
 }
