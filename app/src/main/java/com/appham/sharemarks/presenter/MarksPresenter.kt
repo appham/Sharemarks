@@ -2,6 +2,7 @@ package com.appham.sharemarks.presenter
 
 import android.content.Intent
 import android.util.Log
+import android.view.View
 import com.appham.sharemarks.R
 import com.appham.sharemarks.model.MarkItem
 import com.appham.sharemarks.model.MarksDataSource
@@ -75,18 +76,27 @@ class MarksPresenter(private val view: MarksContract.View,
     }
 
     override fun setMarkDeleted(item: MarkItem, toDelete: Boolean): Boolean {
-        view.removeMarkItem(item)
-        updateDrawerItems()
-        if (item.deleted && toDelete) {
+
+        if (item.deleted && toDelete) { //permanently drop item
+            removeItemView(item)
             return dataSource.dropItem(item)
         }
 
         val isItemModified = dataSource.setMarkDeleted(item, toDelete) > 0
-        if (isItemModified && toDelete) {
-            view.showToast(R.string.mark_moved_to_deleted)
-        } else if (isItemModified && !toDelete) {
-            view.showToast(R.string.mark_undeleted)
+        val undoAction = { view: View ->
+            setMarkDeleted(item, !toDelete)
+            Unit
         }
+
+        if (isItemModified && toDelete) { //set item to deleted
+            if (view.isDeletedFilter()) putAndShowItem(item) else removeItemView(item)
+            view.showSnackbar(R.string.mark_moved_to_deleted, undoAction)
+        } else if (isItemModified && !toDelete) { //set item to not deleted
+            if (view.isDeletedFilter()) removeItemView(item) else putAndShowItem(item)
+            view.showSnackbar(R.string.mark_restored, undoAction)
+        }
+
+        item.deleted = toDelete
 
         return isItemModified
     }
@@ -129,6 +139,12 @@ class MarksPresenter(private val view: MarksContract.View,
         dataSource.putMark(item)
         view.addMarkItem(item)
         updateDrawerItem(item)
+    }
+
+
+    private fun removeItemView(item: MarkItem) {
+        view.removeMarkItem(item)
+        updateDrawerItems()
     }
 
 

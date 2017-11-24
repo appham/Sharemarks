@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.NavigationView
+import android.support.design.widget.Snackbar
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.AppCompatActivity
@@ -33,6 +34,10 @@ class MarksActivity : AppCompatActivity(), MarksContract.View, NavigationView.On
     private lateinit var navFilter: SubMenu
 
     private lateinit var navDomains: SubMenu
+
+    private var snackbar: Snackbar? = null
+
+    private lateinit var currentFilter: String
 
     //region Activity lifecycle methods
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -74,6 +79,8 @@ class MarksActivity : AppCompatActivity(), MarksContract.View, NavigationView.On
                     intent.getStringExtra(Intent.EXTRA_TEXT), referrer)
         }
 
+        currentFilter = getString(R.string.all)
+
     }
     //endregion
 
@@ -88,10 +95,18 @@ class MarksActivity : AppCompatActivity(), MarksContract.View, NavigationView.On
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.title.toString()) {
-            getString(R.string.all) -> presenter.syncMarksFromDb(0)
-            getString(R.string.deleted) -> presenter.syncMarksFromDb(1)
+            getString(R.string.all) -> {
+                presenter.syncMarksFromDb(0)
+                currentFilter = getString(R.string.all)
+            }
+
+            getString(R.string.deleted) -> {
+                presenter.syncMarksFromDb(1)
+                currentFilter = getString(R.string.deleted)
+            }
             else -> {
                 presenter.queryMarksByDomain(item.title.toString())
+                currentFilter = item.title.toString()
             }
         }
         return true
@@ -118,7 +133,19 @@ class MarksActivity : AppCompatActivity(), MarksContract.View, NavigationView.On
     override fun showToast(resId: Int) {
         Toast.makeText(this, resId, Toast.LENGTH_LONG).show()
     }
-    //endregion
+
+    override fun showSnackbar(resId: Int, action: (View) -> Unit) {
+        snackbar?.dismiss()
+        snackbar = Snackbar.make(marksFragment.view, resId, Snackbar.LENGTH_LONG)
+                .setDuration(5000)
+                .setAction(R.string.undo, action)
+        snackbar?.show()
+    }
+
+    override fun isDeletedFilter(): Boolean {
+        return getString(R.string.deleted).equals(currentFilter)
+    }
+//endregion
 
 
 }

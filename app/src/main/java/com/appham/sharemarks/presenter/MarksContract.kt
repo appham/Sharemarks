@@ -14,6 +14,8 @@ interface MarksContract {
         fun addDrawerItem(item: String)
         fun notifyDataChanged()
         fun showToast(resId: Int)
+        fun showSnackbar(resId: Int, action: (android.view.View) -> Unit)
+        fun isDeletedFilter(): Boolean
     }
 
     interface Presenter {
