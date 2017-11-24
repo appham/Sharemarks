@@ -80,6 +80,7 @@ class MarksActivity : AppCompatActivity(), MarksContract.View, NavigationView.On
         }
 
         currentFilter = getString(R.string.all)
+        updateAppTitleToFilter()
 
     }
     //endregion
@@ -109,6 +110,7 @@ class MarksActivity : AppCompatActivity(), MarksContract.View, NavigationView.On
                 currentFilter = item.title.toString()
             }
         }
+        updateAppTitleToFilter()
         return true
     }
     //region
@@ -144,6 +146,10 @@ class MarksActivity : AppCompatActivity(), MarksContract.View, NavigationView.On
 
     override fun isDeletedFilter(): Boolean {
         return getString(R.string.deleted).equals(currentFilter)
+    }
+
+    override fun updateAppTitleToFilter() {
+        supportActionBar?.title = getString(R.string.app_name) + " - " + currentFilter
     }
 //endregion
 
