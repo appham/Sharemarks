@@ -40,6 +40,7 @@ class MarksAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             if (markItem.imageUrl != null) {
                 Picasso.with(context).load(markItem.imageUrl)
                         .resize(300, 200)
+                        .placeholder(R.mipmap.ic_launcher)
                         .onlyScaleDown()
                         .centerInside()
                         .into(holder.imgMark)
