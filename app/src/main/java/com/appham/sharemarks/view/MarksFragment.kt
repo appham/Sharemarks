@@ -72,7 +72,8 @@ class MarksFragment : Fragment() {
                         val intent = Intent(Intent.ACTION_SEND)
                         intent.type = "text/plain"
                         intent.putExtra(Intent.EXTRA_SUBJECT, item.title)
-                        intent.putExtra(Intent.EXTRA_TEXT, item.content + " " + item.url)
+                        intent.putExtra(Intent.EXTRA_TITLE, item.title)
+                        intent.putExtra(Intent.EXTRA_TEXT, item.title + " " + item.url)
                         startActivity(Intent.createChooser(intent, getString(R.string.share_mark)))
                     } catch (ex: android.content.ActivityNotFoundException) {
                         marksActivity.showToast(R.string.share_mark_no_options)

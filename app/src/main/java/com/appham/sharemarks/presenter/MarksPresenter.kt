@@ -17,6 +17,8 @@ class MarksPresenter(private val view: MarksContract.View,
                      private val dataSource: MarksDataSource,
                      private val marks: MutableList<MarkItem>) : MarksContract.Presenter {
 
+    private val TAG = this::class.simpleName
+
     private val drawerItems = mutableListOf<String>()
 
     private val htmlManager by lazy { HtmlManager() }
@@ -117,11 +119,12 @@ class MarksPresenter(private val view: MarksContract.View,
 
             //TODO: what to do if there is no URL found?
 
-            val item = MarkItem.buildMarkItem(sharedText, url, null, referrer)
+            val item = MarkItem.buildMarkItem(
+                    sharedText.replace(url.toString(), "", true),
+                    url,
+                    null,
+                    referrer)
             parseHtml(url, item)
-
-//
-//            putAndShowItem(item)
         }
     }
 
@@ -130,12 +133,12 @@ class MarksPresenter(private val view: MarksContract.View,
                 .subscribeOn(Schedulers.io())
                 .subscribe(
                         { parsedItem ->
-                            Log.d("MarksPresenter", "parsed item: " + parsedItem)
+                            Log.d(TAG, "parsed item: " + parsedItem)
                             putAndShowItem(parsedItem)
                         },
                         { e ->
                             e.printStackTrace()
-                            Log.e("MarksPresenter", "e: " + e)
+                            Log.e(TAG, "e: " + e)
                             putAndShowItem(item)
                         }
                 )

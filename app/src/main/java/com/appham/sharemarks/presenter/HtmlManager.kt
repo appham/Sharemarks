@@ -2,6 +2,7 @@ package com.appham.sharemarks.presenter
 
 import android.content.Context
 import android.util.Log
+import android.util.Patterns
 import com.appham.sharemarks.model.MarkItem
 import com.appham.sharemarks.utils.Utils
 import io.reactivex.Observable
@@ -16,7 +17,7 @@ import java.net.URL
  */
 class HtmlManager {
 
-    private val TAG = "HtmlManager"
+    private val TAG = this::class.simpleName
 
     companion object {
         var userAgentStr: String = "user-agent-string"
@@ -31,7 +32,11 @@ class HtmlManager {
             val doc = Jsoup.connect(url.toString())
                     .followRedirects(true).userAgent(userAgentStr).get()
 
-            if (StringUtil.isBlank(item.title)) item.title = parseTitle(doc)
+            val title = item.title
+            if (StringUtil.isBlank(title) ||
+                    (title != null && title.matches(Regex(Patterns.WEB_URL.pattern())))) {
+                item.title = parseTitle(doc)
+            }
             if (StringUtil.isBlank(item.content)) item.content = parseContent(doc)
             if (StringUtil.isBlank(item.imageUrl) || "null".equals(item.imageUrl)) {
                 item.imageUrl = parseImgUrl(url, doc).toString()
@@ -41,17 +46,14 @@ class HtmlManager {
         }
     }
 
-    private fun parseTitle(doc: Document): String? {
-        val titleElement = doc.select("title")
-        return titleElement?.text()?.trim { it <= ' ' }
-    }
+    private fun parseTitle(doc: Document): String? = doc.select("title")?.text()?.trim()
 
     private fun parseContent(doc: Document): String? {
         var metaDescElement = doc.select("meta[name='description']")
         if (!metaDescElement.hasAttr("content")) {
             metaDescElement = doc.select("meta[property='og:description']")
         }
-        return metaDescElement?.attr("content")?.trim { it <= ' ' }
+        return metaDescElement?.attr("content")?.trim()
     }
 
     private fun parseImgUrl(pageUrl: URL, doc: Document): URL? {
