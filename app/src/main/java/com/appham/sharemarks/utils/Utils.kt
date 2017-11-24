@@ -35,8 +35,8 @@ class Utils {
          */
         fun buildUserAgentStr(context: Context): String {
             val result = StringBuilder(64)
-            result.append("Mozilla/")
-            result.append(System.getProperty("java.vm.version")) // such as 1.1.0
+            result.append("Mozilla/5.0")
+//            result.append(System.getProperty("java.vm.version")) // such as 1.1.0
             result.append(" (Linux; U; Android ")
             val version = Build.VERSION.RELEASE // "1.0" or "3.4b5"
             result.append(if (version.length > 0) version else "1.0")
@@ -56,7 +56,7 @@ class Utils {
             result.append(")")
 
             // additional AppleWebKit etc. stuff
-            result.append("AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/33.0.0.0 ")
+            result.append(" AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/33.0.0.0 ")
             result.append(getTabletMobileStr(context))
             result.append(" Safari/537.36")
 

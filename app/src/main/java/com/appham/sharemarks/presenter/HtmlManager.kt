@@ -58,14 +58,32 @@ class HtmlManager {
 
         var imageUrl: String? = null
 
-        // Look for the og:image declaration
+        // Look for amp-img id="feat-img"
+        imageUrl = doc.select("amp-img[id='feat-img']")?.attr("src")
+        if (imageUrl != null && imageUrl.isNotEmpty()) {
+            return getUrl(pageUrl, imageUrl)
+        }
+
+        // Look for the og:image property declaration
         imageUrl = doc.select("meta[property='og:image']")?.attr("content")
+        if (imageUrl != null && imageUrl.isNotEmpty()) {
+            return getUrl(pageUrl, imageUrl)
+        }
+
+        // Look for the og:image name declaration
+        imageUrl = doc.select("meta[name='og:image']")?.attr("content")
         if (imageUrl != null && imageUrl.isNotEmpty()) {
             return getUrl(pageUrl, imageUrl)
         }
 
         // Look for meta itemprop image declaration
         imageUrl = doc.select("meta[itemprop='image']")?.attr("content")
+        if (imageUrl != null && imageUrl.isNotEmpty()) {
+            return getUrl(pageUrl, imageUrl)
+        }
+
+        // Look for the twitter:image name declaration
+        imageUrl = doc.select("meta[name='twitter:image']")?.attr("content")
         if (imageUrl != null && imageUrl.isNotEmpty()) {
             return getUrl(pageUrl, imageUrl)
         }
@@ -88,6 +106,18 @@ class HtmlManager {
             return getUrl(pageUrl, imageUrl)
         }
 
+        // Look for any amp-img
+        imageUrl = doc.select("amp-img")?.attr("src")
+        if (imageUrl != null && imageUrl.isNotEmpty()) {
+            return getUrl(pageUrl, imageUrl)
+        }
+
+        // Look for any img
+        imageUrl = doc.select("img")?.attr("src")
+        if (imageUrl != null && imageUrl.isNotEmpty()) {
+            return getUrl(pageUrl, imageUrl)
+        }
+
         // return favicon url
         try {
             val faviconUrl = URL(pageUrl.protocol + "://" + pageUrl.host + "/favicon.ico")
@@ -97,8 +127,6 @@ class HtmlManager {
             e.printStackTrace()
             return null
         }
-
-        //TODO: very last fallback: parse any image url from first image in html code
     }
 
     private fun getUrl(pageUrl: URL, imgUrl: String): URL? {
