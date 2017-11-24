@@ -60,63 +60,43 @@ class HtmlManager {
 
         // Look for amp-img id="feat-img"
         imageUrl = doc.select("amp-img[id='feat-img']")?.attr("src")
-        if (imageUrl != null && imageUrl.isNotEmpty()) {
-            return getUrl(pageUrl, imageUrl)
-        }
+        if (imageUrl != null && imageUrl.isNotEmpty()) return getUrl(pageUrl, imageUrl)
 
         // Look for the og:image property declaration
         imageUrl = doc.select("meta[property='og:image']")?.attr("content")
-        if (imageUrl != null && imageUrl.isNotEmpty()) {
-            return getUrl(pageUrl, imageUrl)
-        }
+        if (imageUrl != null && imageUrl.isNotEmpty()) return getUrl(pageUrl, imageUrl)
 
         // Look for the og:image name declaration
         imageUrl = doc.select("meta[name='og:image']")?.attr("content")
-        if (imageUrl != null && imageUrl.isNotEmpty()) {
-            return getUrl(pageUrl, imageUrl)
-        }
+        if (imageUrl != null && imageUrl.isNotEmpty()) return getUrl(pageUrl, imageUrl)
 
         // Look for meta itemprop image declaration
         imageUrl = doc.select("meta[itemprop='image']")?.attr("content")
-        if (imageUrl != null && imageUrl.isNotEmpty()) {
-            return getUrl(pageUrl, imageUrl)
-        }
+        if (imageUrl != null && imageUrl.isNotEmpty()) return getUrl(pageUrl, imageUrl)
 
         // Look for the twitter:image name declaration
         imageUrl = doc.select("meta[name='twitter:image']")?.attr("content")
-        if (imageUrl != null && imageUrl.isNotEmpty()) {
-            return getUrl(pageUrl, imageUrl)
-        }
+        if (imageUrl != null && imageUrl.isNotEmpty()) return getUrl(pageUrl, imageUrl)
 
         // Look for Apple touch icon declarations
         imageUrl = doc.select("link[rel='apple-touch-icon']")?.attr("href")
-        if (imageUrl != null && imageUrl.isNotEmpty()) {
-            return getUrl(pageUrl, imageUrl)
-        }
+        if (imageUrl != null && imageUrl.isNotEmpty()) return getUrl(pageUrl, imageUrl)
 
         // Look for image icon link declaration
         imageUrl = doc.select("link[rel='icon']")?.attr("href")
-        if (imageUrl != null && imageUrl.isNotEmpty()) {
-            return getUrl(pageUrl, imageUrl)
-        }
+        if (imageUrl != null && imageUrl.isNotEmpty()) return getUrl(pageUrl, imageUrl)
 
         // Look for shortcut icon link declaration
         imageUrl = doc.select("link[rel='shortcut icon']")?.attr("href")
-        if (imageUrl != null && imageUrl.isNotEmpty()) {
-            return getUrl(pageUrl, imageUrl)
-        }
+        if (imageUrl != null && imageUrl.isNotEmpty()) return getUrl(pageUrl, imageUrl)
 
         // Look for any amp-img
         imageUrl = doc.select("amp-img")?.attr("src")
-        if (imageUrl != null && imageUrl.isNotEmpty()) {
-            return getUrl(pageUrl, imageUrl)
-        }
+        if (imageUrl != null && imageUrl.isNotEmpty()) return getUrl(pageUrl, imageUrl)
 
         // Look for any img
         imageUrl = doc.select("img")?.attr("src")
-        if (imageUrl != null && imageUrl.isNotEmpty()) {
-            return getUrl(pageUrl, imageUrl)
-        }
+        if (imageUrl != null && imageUrl.isNotEmpty()) return getUrl(pageUrl, imageUrl)
 
         // return favicon url
         try {
