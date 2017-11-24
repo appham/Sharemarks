@@ -81,7 +81,6 @@ class MarksActivity : AppCompatActivity(), MarksContract.View, NavigationView.On
 
         currentFilter = getString(R.string.all)
         updateAppTitleToFilter()
-
     }
     //endregion
 
@@ -151,7 +150,6 @@ class MarksActivity : AppCompatActivity(), MarksContract.View, NavigationView.On
     override fun updateAppTitleToFilter() {
         supportActionBar?.title = getString(R.string.app_name) + " - " + currentFilter
     }
-//endregion
-
+    //endregion
 
 }
