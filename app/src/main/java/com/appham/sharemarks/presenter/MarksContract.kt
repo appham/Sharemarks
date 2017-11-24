@@ -17,6 +17,7 @@ interface MarksContract {
         fun showSnackbar(resId: Int, action: (android.view.View) -> Unit)
         fun isDeletedFilter(): Boolean
         fun updateAppTitleToFilter()
+        fun showShareChooser(item: MarkItem)
     }
 
     interface Presenter {

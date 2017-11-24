@@ -13,6 +13,7 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import com.appham.sharemarks.R
 import com.appham.sharemarks.model.MarkItem
+import com.appham.sharemarks.presenter.MarksContract
 import com.squareup.picasso.Picasso
 
 /**
@@ -33,12 +34,12 @@ class MarksAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
         if (holder is MarkHolder) {
-            val markItem = marks[position]
-            holder.txtTitle.text = position.toString() + " - " + markItem.title
-            holder.txtContent.text = markItem.content
-            holder.txtReferrer.text = markItem.referrer + " | " + markItem.domain
-            if (markItem.imageUrl != null) {
-                Picasso.with(context).load(markItem.imageUrl)
+            val item = marks[position]
+            holder.txtTitle.text = position.toString() + " - " + item.title
+            holder.txtContent.text = item.content
+            holder.txtReferrer.text = item.referrer + " | " + item.domain
+            if (item.imageUrl != null) {
+                Picasso.with(context).load(item.imageUrl)
                         .resize(300, 200)
                         .placeholder(R.mipmap.ic_launcher)
                         .onlyScaleDown()
@@ -51,11 +52,16 @@ class MarksAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
             // add click listener to open browser
             holder.itemView.setOnClickListener {
-                context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(markItem.url)))
+                context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(item.url)))
                 //TODO: open in a webview instead
             }
 
-            holder.itemView.tag = markItem
+            holder.itemView.setOnLongClickListener {
+                (context as MarksContract.View).showShareChooser(item)
+                true
+            }
+
+            holder.itemView.tag = item
         }
 
         //TODO: maybe need different layouts for big and small images

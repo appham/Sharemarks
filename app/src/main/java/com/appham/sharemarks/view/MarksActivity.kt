@@ -1,5 +1,6 @@
 package com.appham.sharemarks.view
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -149,6 +150,20 @@ class MarksActivity : AppCompatActivity(), MarksContract.View, NavigationView.On
 
     override fun updateAppTitleToFilter() {
         supportActionBar?.title = getString(R.string.app_name) + " - " + currentFilter
+    }
+
+    override fun showShareChooser(item: MarkItem) {
+        try {
+            val intent = Intent(Intent.ACTION_SEND)
+            intent.type = "text/plain"
+            intent.putExtra(Intent.EXTRA_SUBJECT, item.title)
+            intent.putExtra(Intent.EXTRA_TITLE, item.title)
+            intent.putExtra(Intent.EXTRA_TEXT, item.title + " " + item.url)
+            startActivity(Intent.createChooser(intent, getString(R.string.share_mark) +
+                    " - " + item.domain))
+        } catch (ex: ActivityNotFoundException) {
+            showToast(R.string.share_mark_no_options)
+        }
     }
     //endregion
 
