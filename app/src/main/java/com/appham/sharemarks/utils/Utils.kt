@@ -36,32 +36,32 @@ class Utils {
         fun buildUserAgentStr(context: Context): String {
             val result = StringBuilder(64)
             result.append("Mozilla/5.0")
-//            result.append(System.getProperty("java.vm.version")) // such as 1.1.0
-            result.append(" (Linux; U; Android ")
+                    .append(" (Linux; U; Android ")
             val version = Build.VERSION.RELEASE // "1.0" or "3.4b5"
-            result.append(if (version.length > 0) version else "1.0")
+            result.append(if (version.isNotEmpty()) version else "1.0")
             // add the model for the release build
             if ("REL" == Build.VERSION.CODENAME) {
                 val model = Build.MODEL
-                if (model.length > 0) {
+                if (model.isNotEmpty()) {
                     result.append("; ")
-                    result.append(model)
+                            .append(model)
                 }
             }
             val id = Build.ID // "MASTER" or "M4-rc20"
-            if (id.length > 0) {
+            if (id.isNotEmpty()) {
                 result.append(" Build/")
-                result.append(id)
+                        .append(id)
             }
             result.append(")")
 
             // additional AppleWebKit etc. stuff
             result.append(" AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/33.0.0.0 ")
-            result.append(getTabletMobileStr(context))
-            result.append(" Safari/537.36")
+                    .append(getTabletMobileStr(context))
+                    .append(" Safari/537.36")
 
             // add package name
-            result.append(" [").append(context.packageName).append("/").append(BuildConfig.VERSION_NAME).append("]")
+            result.append(" [").append(context.packageName).append("/")
+                    .append(BuildConfig.VERSION_NAME).append("]")
             return result.toString()
         }
 
@@ -70,11 +70,8 @@ class Utils {
          * @param context
          * @return "Tablet" or "Mobile" String for User Agent
          */
-        fun getTabletMobileStr(context: Context): String {
-            return if (isTablet(context)) {
-                "Tablet"
-            } else "Mobile"
-        }
+        fun getTabletMobileStr(context: Context): String =
+                if (isTablet(context)) "Tablet" else "Mobile"
 
 
         /**
@@ -82,9 +79,8 @@ class Utils {
          * @param context
          * @return true if device is a tablet
          */
-        fun isTablet(context: Context): Boolean {
-            return context.resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK >= Configuration.SCREENLAYOUT_SIZE_LARGE
-        }
+        fun isTablet(context: Context): Boolean = context.resources.configuration.screenLayout and
+                Configuration.SCREENLAYOUT_SIZE_MASK >= Configuration.SCREENLAYOUT_SIZE_LARGE
 
     }
 }
