@@ -1,14 +1,19 @@
 package com.appham.sharemarks.view
 
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
+import android.graphics.drawable.RotateDrawable
 import android.net.Uri
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.LinearInterpolator
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
@@ -43,14 +48,25 @@ class MarksAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             holder.txtContent.text = item.content
             holder.txtReferrer.text = item.referrer + " | " + item.domain
             if (item.imageUrl != null) {
+
+                // rotating placeholder image
+                val placeholder = ContextCompat.getDrawable(context, R.drawable.ic_launcher_rotate) as RotateDrawable
+                val animator = ObjectAnimator.ofInt(placeholder, "level", 0, 10000)
+                animator.repeatCount = Animation.INFINITE
+                animator.duration = 2000
+                animator.interpolator = LinearInterpolator()
+                animator.start()
+
                 Picasso.with(context).load(item.imageUrl)
                         .resize(screenWidthPx / 3,
                                 screenWidthPx / 4)
-                        .placeholder(R.mipmap.ic_launcher)
+                        .placeholder(placeholder)
+                        .error(R.mipmap.ic_launcher)
                         .onlyScaleDown()
                         .centerInside()
                         .transform(RoundedCornersTransformation(10, 10))
                         .into(holder.imgMark)
+
                 holder.imgMark.visibility = View.VISIBLE
             } else {
                 holder.imgMark.visibility = View.GONE
