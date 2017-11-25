@@ -16,6 +16,7 @@ import com.appham.sharemarks.R
 import com.appham.sharemarks.model.MarkItem
 import com.appham.sharemarks.presenter.MarksContract
 import com.squareup.picasso.Picasso
+import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
 
 /**
  * @author thomas
@@ -48,6 +49,7 @@ class MarksAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         .placeholder(R.mipmap.ic_launcher)
                         .onlyScaleDown()
                         .centerInside()
+                        .transform(RoundedCornersTransformation(10, 10))
                         .into(holder.imgMark)
                 holder.imgMark.visibility = View.VISIBLE
             } else {

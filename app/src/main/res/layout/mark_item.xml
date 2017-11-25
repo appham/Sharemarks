@@ -6,7 +6,7 @@
     style="@style/CardMarkItem"
     card_view:cardElevation="4dp"
     card_view:contentPadding="4dp"
-    card_view:cardCornerRadius="4dp">
+    card_view:cardCornerRadius="10dp">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     android:id="@+id/layMarkItem"
