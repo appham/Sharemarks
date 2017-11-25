@@ -2,6 +2,7 @@ package com.appham.sharemarks.view
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.net.Uri
 import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
@@ -25,6 +26,8 @@ class MarksAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private lateinit var context: Context
 
+    private val screenWidthPx by lazy { Resources.getSystem().displayMetrics.widthPixels }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         context = parent.context
         val view = LayoutInflater.from(context)
@@ -40,7 +43,8 @@ class MarksAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             holder.txtReferrer.text = item.referrer + " | " + item.domain
             if (item.imageUrl != null) {
                 Picasso.with(context).load(item.imageUrl)
-                        .resize(300, 200)
+                        .resize(screenWidthPx / 3,
+                                screenWidthPx / 4)
                         .placeholder(R.mipmap.ic_launcher)
                         .onlyScaleDown()
                         .centerInside()
