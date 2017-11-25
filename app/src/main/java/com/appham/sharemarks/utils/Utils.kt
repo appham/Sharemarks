@@ -2,7 +2,6 @@ package com.appham.sharemarks.utils
 
 import android.content.Context
 import android.content.res.Configuration
-import android.content.res.Resources
 import android.os.Build
 import android.util.Log
 import android.util.Patterns
@@ -86,8 +85,6 @@ class Utils {
         fun isTablet(context: Context): Boolean {
             return context.resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK >= Configuration.SCREENLAYOUT_SIZE_LARGE
         }
-
-        fun getScreenWidth(): Int = Resources.getSystem().displayMetrics.widthPixels
 
     }
 }
