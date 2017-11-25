@@ -124,6 +124,10 @@ class MarksPresenter(private val view: MarksContract.View,
                     url,
                     null,
                     referrer)
+
+            view.addMarkItem(item)
+            updateDrawerItem(item)
+
             parseHtml(url, item)
         }
     }
@@ -134,12 +138,14 @@ class MarksPresenter(private val view: MarksContract.View,
                 .subscribe(
                         { parsedItem ->
                             Log.d(TAG, "parsed item: " + parsedItem)
-                            putAndShowItem(parsedItem)
+                            view.notifyItemChanged(0)
+                            dataSource.putMark(item)
                         },
                         { e ->
                             e.printStackTrace()
                             Log.e(TAG, "e: " + e)
-                            putAndShowItem(item)
+                            view.notifyItemChanged(0)
+                            dataSource.putMark(item)
                         }
                 )
     }

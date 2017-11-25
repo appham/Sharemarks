@@ -116,25 +116,20 @@ class MarksActivity : AppCompatActivity(), MarksContract.View, NavigationView.On
     //region
 
     //region MarksContract interface methods
-    override fun addMarkItem(item: MarkItem) {
-        runOnUiThread { marksFragment.addItem(item) }
-    }
+    override fun addMarkItem(item: MarkItem) = runOnUiThread { marksFragment.addItem(item) }
 
-    override fun removeMarkItem(item: MarkItem) {
-        runOnUiThread { marksFragment.removeItem(item) }
-    }
+    override fun removeMarkItem(item: MarkItem) = runOnUiThread { marksFragment.removeItem(item) }
 
-    override fun addDrawerItem(item: String) {
-        runOnUiThread { navDomains.add(item).setIcon(R.mipmap.ic_launcher_foreground) }
-    }
+    override fun addDrawerItem(item: String) =
+            runOnUiThread { navDomains.add(item).setIcon(R.mipmap.ic_launcher_foreground) }
 
-    override fun notifyDataChanged() {
-        runOnUiThread { marksFragment.getMarksAdapter().notifyDataSetChanged() }
-    }
+    override fun notifyDataChanged() =
+            runOnUiThread { marksFragment.getMarksAdapter().notifyDataSetChanged() }
 
-    override fun showToast(resId: Int) {
-        Toast.makeText(this, resId, Toast.LENGTH_LONG).show()
-    }
+    override fun notifyItemChanged(index: Int) =
+            runOnUiThread { marksFragment.getMarksAdapter().notifyItemChanged(index) }
+
+    override fun showToast(resId: Int) = Toast.makeText(this, resId, Toast.LENGTH_LONG).show()
 
     override fun showSnackbar(resId: Int, action: (View) -> Unit) {
         snackbar?.dismiss()
@@ -144,9 +139,7 @@ class MarksActivity : AppCompatActivity(), MarksContract.View, NavigationView.On
         snackbar?.show()
     }
 
-    override fun isDeletedFilter(): Boolean {
-        return getString(R.string.deleted).equals(currentFilter)
-    }
+    override fun isDeletedFilter(): Boolean = getString(R.string.deleted).equals(currentFilter)
 
     override fun updateAppTitleToFilter() {
         supportActionBar?.title = getString(R.string.app_name) + " - " + currentFilter
