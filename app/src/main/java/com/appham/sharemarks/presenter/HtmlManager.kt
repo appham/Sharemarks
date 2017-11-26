@@ -52,10 +52,10 @@ class HtmlManager {
 
     private fun parseContent(doc: Document): String? {
 
-        var metaDescElement = doc.select("meta[name='description']")?.attr("content")
+        var metaDescElement = doc.select("meta[name='description']")?.attr("content")?.trim()
         if (metaDescElement?.isNotBlank() == true) return metaDescElement
 
-        metaDescElement = doc.select("meta[property='og:description']")?.attr("content")
+        metaDescElement = doc.select("meta[property='og:description']")?.attr("content")?.trim()
         if (metaDescElement?.isNotBlank() == true) return metaDescElement
 
         return doc.select("title,h1,h2,h3,h4,h5,h6")?.text()?.trim()
@@ -70,23 +70,23 @@ class HtmlManager {
         Log.d(TAG, " --> with ua string: " + uaStr)
 
         // Look for the twitter:image declaration
-        var imageUrl: String? = doc.select("meta[name='twitter:image']")?.attr("content")
+        var imageUrl: String? = doc.select("meta[name='twitter:image']")?.attr("content")?.trim()
         if (imageUrl?.isNotEmpty() == true) return getUrl(pageUrl, imageUrl)
 
         // Look for the og:image property declaration
-        imageUrl = doc.select("meta[property='og:image']")?.attr("content")
+        imageUrl = doc.select("meta[property='og:image']")?.attr("content")?.trim()
         if (imageUrl?.isNotEmpty() == true) return getUrl(pageUrl, imageUrl)
 
         // Look for the og:image name declaration
-        imageUrl = doc.select("meta[name='og:image']")?.attr("content")
+        imageUrl = doc.select("meta[name='og:image']")?.attr("content")?.trim()
         if (imageUrl?.isNotEmpty() == true) return getUrl(pageUrl, imageUrl)
 
         // Look for meta itemprop image declaration
-        imageUrl = doc.select("meta[itemprop='image']")?.attr("content")
+        imageUrl = doc.select("meta[itemprop='image']")?.attr("content")?.trim()
         if (imageUrl?.isNotEmpty() == true) return getUrl(pageUrl, imageUrl)
 
         // Look for amp-img id="feat-img"
-        imageUrl = doc.select("amp-img[id='feat-img']")?.attr("src")
+        imageUrl = doc.select("amp-img[id='feat-img']")?.attr("src")?.trim()
         if (imageUrl?.isNotEmpty() == true) return getUrl(pageUrl, imageUrl)
 
         // Try again with Tablet ua string, if mobile site doesn't have a proper image
@@ -111,23 +111,23 @@ class HtmlManager {
         }
 
         // Look for Apple touch icon declarations
-        imageUrl = doc.select("link[rel='apple-touch-icon']")?.attr("href")
+        imageUrl = doc.select("link[rel='apple-touch-icon']")?.attr("href")?.trim()
         if (imageUrl?.isNotEmpty() == true) return getUrl(pageUrl, imageUrl)
 
         // Look for image icon link declaration
-        imageUrl = doc.select("link[rel='icon']")?.attr("href")
+        imageUrl = doc.select("link[rel='icon']")?.attr("href")?.trim()
         if (imageUrl?.isNotEmpty() == true) return getUrl(pageUrl, imageUrl)
 
         // Look for shortcut icon link declaration
-        imageUrl = doc.select("link[rel='shortcut icon']")?.attr("href")
+        imageUrl = doc.select("link[rel='shortcut icon']")?.attr("href")?.trim()
         if (imageUrl?.isNotEmpty() == true) return getUrl(pageUrl, imageUrl)
 
         // Look for any amp-img
-        imageUrl = doc.select("amp-img")?.attr("src")
+        imageUrl = doc.select("amp-img")?.attr("src")?.trim()
         if (imageUrl?.isNotEmpty() == true) return getUrl(pageUrl, imageUrl)
 
         // Look for any img
-        imageUrl = doc.select("img")?.attr("src")
+        imageUrl = doc.select("img")?.attr("src")?.trim()
         if (imageUrl?.isNotEmpty() == true) return getUrl(pageUrl, imageUrl)
 
         // return favicon url
