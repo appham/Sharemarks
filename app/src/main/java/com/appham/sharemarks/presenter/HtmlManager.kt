@@ -47,12 +47,8 @@ class HtmlManager {
         }
     }
 
-    private fun parseTitle(doc: Document): String? {
-        val title = doc.select("title")?.text()?.trim()
-        if (!title.isNullOrBlank()) return title
-
-        return doc.select("h1,h2,h3,h4,h5,h6")?.first()?.text()?.trim()
-    }
+    private fun parseTitle(doc: Document): String? =
+            doc.select("title,h1,h2,h3,h4,h5,h6")?.first()?.text()?.trim()
 
     private fun parseContent(doc: Document): String? {
 
@@ -62,7 +58,7 @@ class HtmlManager {
         metaDescElement = doc.select("meta[property='og:description']")?.attr("content")
         if (metaDescElement?.isNotBlank() == true) return metaDescElement
 
-        return doc.select("h1,h2,h3,h4,h5,h6,title")?.text()?.trim()
+        return doc.select("title,h1,h2,h3,h4,h5,h6")?.text()?.trim()
     }
 
     /**
