@@ -46,7 +46,7 @@ class MarksActivity : AppCompatActivity(), MarksContract.View, NavigationView.On
         setContentView(R.layout.activity_marks)
 
         // generate a ua string for loading websites
-        HtmlManager.initUserAgentStr(this)
+        HtmlManager.initUserAgentStr(packageName, resources.configuration.screenLayout)
 
         // navigation drawer
         drawer = findViewById<View>(R.id.drawerLayout) as DrawerLayout

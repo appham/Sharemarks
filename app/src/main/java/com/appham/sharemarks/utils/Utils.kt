@@ -1,6 +1,5 @@
 package com.appham.sharemarks.utils
 
-import android.content.Context
 import android.content.res.Configuration
 import android.os.Build
 import android.util.Log
@@ -29,12 +28,23 @@ class Utils {
             return null
         }
 
+        fun buildDeskUaStr(appId: String): String {
+            val result = StringBuilder()
+            result.append("Mozilla/5.0 (Windows NT 6.2; WOW64) " +
+                    "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.94 Safari/537.36")
+            appendAppId(result, appId)
+            return result.toString()
+        }
+
+        fun buildUserAgentStr(appId: String, screenLayout: Int): String =
+                buildUserAgentStr(appId, getTabletMobileStr(screenLayout))
+
         /**
          * Returns an HTTP user agent of the form
-         * "Mozilla/1.1.0 (Linux; U; Android Eclair Build/MASTER) ... ".
+         * "Mozilla/5.0 (Linux; U; Android 5.1; XT1039 Build/LPBS23.13-17.3-1) ... ".
          */
-        fun buildUserAgentStr(context: Context): String {
-            val result = StringBuilder(64)
+        fun buildUserAgentStr(appId: String, deviceType: String): String {
+            val result = StringBuilder()
             result.append("Mozilla/5.0")
                     .append(" (Linux; U; Android ")
             val version = Build.VERSION.RELEASE // "1.0" or "3.4b5"
@@ -55,14 +65,19 @@ class Utils {
             result.append(")")
 
             // additional AppleWebKit etc. stuff
-            result.append(" AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/33.0.0.0 ")
-                    .append(getTabletMobileStr(context))
+            result.append(" AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.98 ")
+                    .append(deviceType)
                     .append(" Safari/537.36")
 
-            // add package name
-            result.append(" [").append(context.packageName).append("/")
-                    .append(BuildConfig.VERSION_NAME).append("]")
+            // add app id package name
+            appendAppId(result, appId)
+
             return result.toString()
+        }
+
+        private fun appendAppId(result: StringBuilder, appId: String) {
+            result.append(" [").append(appId).append("/")
+                    .append(BuildConfig.VERSION_NAME).append("]")
         }
 
         /**
@@ -70,16 +85,15 @@ class Utils {
          * @param context
          * @return "Tablet" or "Mobile" String for User Agent
          */
-        fun getTabletMobileStr(context: Context): String =
-                if (isTablet(context)) "Tablet" else "Mobile"
-
+        fun getTabletMobileStr(screenLayout: Int): String =
+                if (isTablet(screenLayout)) "Tablet" else "Mobile"
 
         /**
          *
          * @param context
          * @return true if device is a tablet
          */
-        fun isTablet(context: Context): Boolean = context.resources.configuration.screenLayout and
+        fun isTablet(screenLayout: Int): Boolean = screenLayout and
                 Configuration.SCREENLAYOUT_SIZE_MASK >= Configuration.SCREENLAYOUT_SIZE_LARGE
 
     }

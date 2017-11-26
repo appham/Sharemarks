@@ -1,6 +1,5 @@
 package com.appham.sharemarks.presenter
 
-import android.content.Context
 import android.util.Log
 import android.util.Patterns
 import com.appham.sharemarks.model.MarkItem
@@ -20,9 +19,11 @@ class HtmlManager {
     private val TAG = this::class.simpleName
 
     companion object {
-        var userAgentStr: String = "user-agent-string"
-        fun initUserAgentStr(context: Context) {
-            userAgentStr = Utils.buildUserAgentStr(context)
+        var userAgentStr: String = ""
+        var deskUaStr: String = ""
+        fun initUserAgentStr(appId: String, screenLayout: Int) {
+            userAgentStr = Utils.buildUserAgentStr(appId, screenLayout)
+            deskUaStr = Utils.buildDeskUaStr(appId)
         }
     }
 
@@ -39,7 +40,7 @@ class HtmlManager {
             }
             if (StringUtil.isBlank(item.content)) item.content = parseContent(doc)
             if (StringUtil.isBlank(item.imageUrl) || "null".equals(item.imageUrl)) {
-                item.imageUrl = parseImgUrl(url, doc).toString()
+                item.imageUrl = parseImgUrl(url, doc, userAgentStr).toString()
             }
 
             subscriber.onNext(item)
@@ -56,49 +57,74 @@ class HtmlManager {
         return metaDescElement?.attr("content")?.trim()
     }
 
-    private fun parseImgUrl(pageUrl: URL, doc: Document): URL? {
+    /**
+     * _Desperately_ tries to find a proper image url in the given html doc
+     */
+    private fun parseImgUrl(pageUrl: URL, doc: Document, uaStr: String): URL? {
 
-        var imageUrl: String? = null
+        Log.d(TAG, "parsing url: " + pageUrl)
+        Log.d(TAG, " --> with ua string: " + uaStr)
 
-        // Look for amp-img id="feat-img"
-        imageUrl = doc.select("amp-img[id='feat-img']")?.attr("src")
-        if (imageUrl != null && imageUrl.isNotEmpty()) return getUrl(pageUrl, imageUrl)
+        // Look for the twitter:image declaration
+        var imageUrl: String? = doc.select("meta[name='twitter:image']")?.attr("content")
+        if (imageUrl?.isNotEmpty() == true) return getUrl(pageUrl, imageUrl)
 
         // Look for the og:image property declaration
         imageUrl = doc.select("meta[property='og:image']")?.attr("content")
-        if (imageUrl != null && imageUrl.isNotEmpty()) return getUrl(pageUrl, imageUrl)
+        if (imageUrl?.isNotEmpty() == true) return getUrl(pageUrl, imageUrl)
 
         // Look for the og:image name declaration
         imageUrl = doc.select("meta[name='og:image']")?.attr("content")
-        if (imageUrl != null && imageUrl.isNotEmpty()) return getUrl(pageUrl, imageUrl)
+        if (imageUrl?.isNotEmpty() == true) return getUrl(pageUrl, imageUrl)
 
         // Look for meta itemprop image declaration
         imageUrl = doc.select("meta[itemprop='image']")?.attr("content")
-        if (imageUrl != null && imageUrl.isNotEmpty()) return getUrl(pageUrl, imageUrl)
+        if (imageUrl?.isNotEmpty() == true) return getUrl(pageUrl, imageUrl)
 
-        // Look for the twitter:image name declaration
-        imageUrl = doc.select("meta[name='twitter:image']")?.attr("content")
-        if (imageUrl != null && imageUrl.isNotEmpty()) return getUrl(pageUrl, imageUrl)
+        // Look for amp-img id="feat-img"
+        imageUrl = doc.select("amp-img[id='feat-img']")?.attr("src")
+        if (imageUrl?.isNotEmpty() == true) return getUrl(pageUrl, imageUrl)
+
+        // Try again with Tablet ua string, if mobile site doesn't have a proper image
+        if (uaStr.contains("Mobile")) {
+            val tabUaStr = userAgentStr.replace("Mobile", "Tablet")
+            val newDoc = Jsoup.connect(pageUrl.toString())
+                    .followRedirects(true).userAgent(tabUaStr).get()
+            return parseImgUrl(pageUrl, newDoc, tabUaStr)
+        } else if (uaStr.contains("Tablet")) { // Try with desktop ua string with canonical url
+            val canonicalStr = doc.select("link[rel='canonical']")?.attr("href")
+            if (canonicalStr?.isNotBlank() == true) {
+                return try {
+                    val canonical = URL(canonicalStr)
+                    val newDoc = Jsoup.connect(canonical.toString())
+                            .followRedirects(true).userAgent(deskUaStr).get()
+                    parseImgUrl(canonical, newDoc, deskUaStr)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    parseImgUrl(pageUrl, doc, deskUaStr)
+                }
+            }
+        }
 
         // Look for Apple touch icon declarations
         imageUrl = doc.select("link[rel='apple-touch-icon']")?.attr("href")
-        if (imageUrl != null && imageUrl.isNotEmpty()) return getUrl(pageUrl, imageUrl)
+        if (imageUrl?.isNotEmpty() == true) return getUrl(pageUrl, imageUrl)
 
         // Look for image icon link declaration
         imageUrl = doc.select("link[rel='icon']")?.attr("href")
-        if (imageUrl != null && imageUrl.isNotEmpty()) return getUrl(pageUrl, imageUrl)
+        if (imageUrl?.isNotEmpty() == true) return getUrl(pageUrl, imageUrl)
 
         // Look for shortcut icon link declaration
         imageUrl = doc.select("link[rel='shortcut icon']")?.attr("href")
-        if (imageUrl != null && imageUrl.isNotEmpty()) return getUrl(pageUrl, imageUrl)
+        if (imageUrl?.isNotEmpty() == true) return getUrl(pageUrl, imageUrl)
 
         // Look for any amp-img
         imageUrl = doc.select("amp-img")?.attr("src")
-        if (imageUrl != null && imageUrl.isNotEmpty()) return getUrl(pageUrl, imageUrl)
+        if (imageUrl?.isNotEmpty() == true) return getUrl(pageUrl, imageUrl)
 
         // Look for any img
         imageUrl = doc.select("img")?.attr("src")
-        if (imageUrl != null && imageUrl.isNotEmpty()) return getUrl(pageUrl, imageUrl)
+        if (imageUrl?.isNotEmpty() == true) return getUrl(pageUrl, imageUrl)
 
         // return favicon url
         try {
