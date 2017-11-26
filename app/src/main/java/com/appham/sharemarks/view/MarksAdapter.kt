@@ -44,9 +44,9 @@ class MarksAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
         if (holder is MarkHolder) {
             val item = marks[position]
-            holder.txtTitle.text = position.toString() + " - " + item.title
+            holder.txtTitle.text = position.toString().plus(" - ").plus(item.title)
             holder.txtContent.text = item.content
-            holder.txtReferrer.text = item.referrer + " | " + item.domain
+            holder.txtReferrer.text = item.referrer.plus(" | ").plus(item.domain)
             if (item.imageUrl != null) {
 
                 // rotating placeholder image

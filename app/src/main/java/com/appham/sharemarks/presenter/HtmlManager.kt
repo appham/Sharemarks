@@ -10,6 +10,7 @@ import org.jsoup.helper.StringUtil
 import org.jsoup.nodes.Document
 import java.net.MalformedURLException
 import java.net.URL
+import java.util.*
 
 /**
  * @author thomas
@@ -19,6 +20,7 @@ class HtmlManager {
     private val TAG = this::class.simpleName
 
     companion object {
+        val acceptLang = "Accept-Language"
         var userAgentStr: String = ""
         var deskUaStr: String = ""
         fun initUserAgentStr(appId: String, screenLayout: Int) {
@@ -31,7 +33,10 @@ class HtmlManager {
         return Observable.create { subscriber ->
 
             val doc = Jsoup.connect(url.toString())
-                    .followRedirects(true).userAgent(userAgentStr).get()
+                    .followRedirects(true)
+                    .userAgent(userAgentStr)
+                    .header(acceptLang, Locale.getDefault().language)
+                    .get()
 
             val title = item.title
             if (StringUtil.isBlank(title) ||
@@ -85,6 +90,10 @@ class HtmlManager {
         imageUrl = doc.select("meta[itemprop='image']")?.attr("content")?.trim()
         if (imageUrl?.isNotEmpty() == true) return getUrl(pageUrl, imageUrl)
 
+        // Look for itemprop image declaration
+        imageUrl = doc.select("img[itemprop='image']")?.attr("src")?.trim()
+        if (imageUrl?.isNotEmpty() == true) return getUrl(pageUrl, imageUrl)
+
         // Look for amp-img id="feat-img"
         imageUrl = doc.select("amp-img[id='feat-img']")?.attr("src")?.trim()
         if (imageUrl?.isNotEmpty() == true) return getUrl(pageUrl, imageUrl)
@@ -93,7 +102,10 @@ class HtmlManager {
         if (uaStr.contains("Mobile")) {
             val tabUaStr = userAgentStr.replace("Mobile", "Tablet")
             val newDoc = Jsoup.connect(pageUrl.toString())
-                    .followRedirects(true).userAgent(tabUaStr).get()
+                    .followRedirects(true)
+                    .userAgent(tabUaStr)
+                    .header(acceptLang, Locale.getDefault().language)
+                    .get()
             return parseImgUrl(pageUrl, newDoc, tabUaStr)
         } else if (uaStr.contains("Tablet")) { // Try with desktop ua string with canonical url
             val canonicalStr = doc.select("link[rel='canonical']")?.attr("href")
@@ -101,7 +113,10 @@ class HtmlManager {
                 return try {
                     val canonical = URL(canonicalStr)
                     val newDoc = Jsoup.connect(canonical.toString())
-                            .followRedirects(true).userAgent(deskUaStr).get()
+                            .followRedirects(true)
+                            .userAgent(deskUaStr)
+                            .header(acceptLang, Locale.getDefault().language)
+                            .get()
                     parseImgUrl(canonical, newDoc, deskUaStr)
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -109,6 +124,14 @@ class HtmlManager {
                 }
             }
         }
+
+        // Look for any amp-img
+        imageUrl = doc.select("amp-img")?.attr("src")?.trim()
+        if (imageUrl?.isNotEmpty() == true) return getUrl(pageUrl, imageUrl)
+
+        // Look for any img
+        imageUrl = doc.select("img")?.attr("src")?.trim()
+        if (imageUrl?.isNotEmpty() == true) return getUrl(pageUrl, imageUrl)
 
         // Look for Apple touch icon declarations
         imageUrl = doc.select("link[rel='apple-touch-icon']")?.attr("href")?.trim()
@@ -120,14 +143,6 @@ class HtmlManager {
 
         // Look for shortcut icon link declaration
         imageUrl = doc.select("link[rel='shortcut icon']")?.attr("href")?.trim()
-        if (imageUrl?.isNotEmpty() == true) return getUrl(pageUrl, imageUrl)
-
-        // Look for any amp-img
-        imageUrl = doc.select("amp-img")?.attr("src")?.trim()
-        if (imageUrl?.isNotEmpty() == true) return getUrl(pageUrl, imageUrl)
-
-        // Look for any img
-        imageUrl = doc.select("img")?.attr("src")?.trim()
         if (imageUrl?.isNotEmpty() == true) return getUrl(pageUrl, imageUrl)
 
         // return favicon url
