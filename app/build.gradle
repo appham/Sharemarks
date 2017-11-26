@@ -37,8 +37,9 @@ dependencies {
     implementation "com.jskierbi:cupboard-kotlin:+"
     implementation 'io.reactivex.rxjava2:rxkotlin:+'
     implementation 'org.jsoup:jsoup:1.9.2'
-    implementation 'com.squareup.picasso:picasso:2.5.2'
-    implementation 'jp.wasabeef:picasso-transformations:2.1.0'
+    implementation 'com.squareup.picasso:picasso:+'
+    implementation 'jp.wasabeef:picasso-transformations:+'
+    implementation 'com.squareup.okhttp:okhttp:+'
 
     // cupboard-kotlin does not include cupboard itself
     implementation "nl.qbusict:cupboard:2.2.0"
