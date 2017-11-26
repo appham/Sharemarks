@@ -47,14 +47,22 @@ class HtmlManager {
         }
     }
 
-    private fun parseTitle(doc: Document): String? = doc.select("title")?.text()?.trim()
+    private fun parseTitle(doc: Document): String? {
+        val title = doc.select("title")?.text()?.trim()
+        if (!title.isNullOrBlank()) return title
+
+        return doc.select("h1,h2,h3,h4,h5,h6")?.first()?.text()?.trim()
+    }
 
     private fun parseContent(doc: Document): String? {
-        var metaDescElement = doc.select("meta[name='description']")
-        if (!metaDescElement.hasAttr("content")) {
-            metaDescElement = doc.select("meta[property='og:description']")
-        }
-        return metaDescElement?.attr("content")?.trim()
+
+        var metaDescElement = doc.select("meta[name='description']")?.attr("content")
+        if (metaDescElement?.isNotBlank() == true) return metaDescElement
+
+        metaDescElement = doc.select("meta[property='og:description']")?.attr("content")
+        if (metaDescElement?.isNotBlank() == true) return metaDescElement
+
+        return doc.select("h1,h2,h3,h4,h5,h6,title")?.text()?.trim()
     }
 
     /**
