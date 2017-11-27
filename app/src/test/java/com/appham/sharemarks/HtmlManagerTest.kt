@@ -73,16 +73,22 @@ class HtmlManagerTest {
     @Test
     (expected = RuntimeException::class)
     fun `not found page should lead to exception`() {
-        val url = URL(testPath.plus("notfoundpage404"))
-        val observable = htmlManager.parseHtml(url, MarkItem.create(null, null, null, url, null))
-        observable.blockingFirst()
+        parse("notfoundpage404")
+    }
+
+    @Test
+    fun `title field should be set to html title tag`() {
+        assertEquals("title tag", parse("test-no-img.html").title)
     }
 
     @Test
     fun `on pages without images the image url should be favicon url`() {
-        val url = URL(testPath.plus("test-no-img.html"))
+        assertEquals("http://localhost/favicon.ico", parse("test-no-img.html").imageUrl)
+    }
+
+    private fun parse(path: String): MarkItem {
+        val url = URL(testPath.plus(path))
         val observable = htmlManager.parseHtml(url, MarkItem.create(null, null, null, url, null))
-        val item = observable.blockingFirst()
-        assertEquals("http://localhost/favicon.ico", item.imageUrl)
+        return observable.blockingFirst()
     }
 }
