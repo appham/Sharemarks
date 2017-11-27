@@ -16,5 +16,5 @@ Installation Instructions for Windows:
 Running:
 * Download dependencies: npm install
 * Start the server: npm start
-* Check it's working by loading this URL in your favourite browser: http://localhost:8765/color/32/32/abc123
+* Check it's working by loading this URL in your favourite browser: http://localhost:8765
 * To access localhost from the android emulator use IP 10.0.2.2

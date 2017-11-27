@@ -11,6 +11,7 @@ import java.io.File
 import java.io.InputStream
 import java.net.URL
 import java.net.UnknownHostException
+import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.test.assertEquals
 
@@ -24,8 +25,21 @@ class HtmlManagerTest {
         @BeforeClass
         @JvmStatic
         fun setup() {
+            val proc = Runtime.getRuntime().exec("curl -Is " + testPath + " | head -1",
+                    null, File("testHtml/server"))
+            Scanner(proc.inputStream).use {
+                while (it.hasNextLine()) {
+                    val line = it.nextLine()
+                    println(line)
+                    if (line.endsWith("200 OK")) {
+                        println("Server is running!")
+                        return
+                    }
+                }
+            }
+            proc.waitFor(5, TimeUnit.SECONDS)
             System.out.println("Setting up server")
-            runCommand("npm start")
+            runCommand("npm restart")
         }
 
         @AfterClass
