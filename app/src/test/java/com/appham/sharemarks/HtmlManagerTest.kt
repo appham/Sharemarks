@@ -82,8 +82,13 @@ class HtmlManagerTest {
     }
 
     @Test
-    fun `on pages without images the image url should be favicon url`() {
+    fun `image url field should be favicon url for pages without image`() {
         assertEquals("http://localhost/favicon.ico", parse("test-no-img.html").imageUrl)
+    }
+
+    @Test
+    fun `image url field should be valid url for pages with featured image`() {
+        assertEquals("http://localhost:8765/ok-img.jpg", parse("test-with-img.html").imageUrl)
     }
 
     private fun parse(path: String): MarkItem {
