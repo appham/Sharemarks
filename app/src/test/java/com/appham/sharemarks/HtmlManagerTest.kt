@@ -17,6 +17,7 @@ val testPath = "http://localhost:8765/"
 
 class HtmlManagerTest {
 
+    //region test server setup etc.
     companion object {
 
         @BeforeClass
@@ -34,7 +35,7 @@ class HtmlManagerTest {
                     }
                 }
             }
-            proc.waitFor(5, TimeUnit.SECONDS)
+            proc.waitFor(1, TimeUnit.SECONDS)
             System.out.println("Setting up server")
             runCommand("npm restart")
         }
@@ -48,7 +49,7 @@ class HtmlManagerTest {
 
         private fun runCommand(cmd: String) {
             val proc = Runtime.getRuntime().exec(cmd, null, File("testHtml/server"))
-            proc.waitFor(5, TimeUnit.SECONDS)
+            proc.waitFor(1, TimeUnit.SECONDS)
         }
 
         @get:Rule
@@ -70,6 +71,8 @@ class HtmlManagerTest {
         }
     }
 
+    //endregion
+
     @Test
     (expected = RuntimeException::class)
     fun `not found page should lead to exception`() {
@@ -79,6 +82,21 @@ class HtmlManagerTest {
     @Test
     fun `title field should be set to html title tag`() {
         assertEquals("title tag", parse("test-no-img.html").title)
+    }
+
+    @Test
+    fun `title field should be set to first html h tag if there is no title tag`() {
+        assertEquals("h1 content", parse("test-no-title.html").title)
+    }
+
+    @Test
+    fun `content field should be set to meta description`() {
+        assertEquals("meta desc", parse("test-with-img.html").content)
+    }
+
+    @Test
+    fun `content field should be set to html h tags if there is no title tag`() {
+        assertEquals("h1 content h2 content", parse("test-no-title.html").content)
     }
 
     @Test
