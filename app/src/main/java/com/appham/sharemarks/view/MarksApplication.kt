@@ -19,6 +19,7 @@ class MarksApplication : Application() {
         httpClient.setConnectTimeout(10, TimeUnit.SECONDS)
         httpClient.setReadTimeout(10, TimeUnit.SECONDS)
         val picasso = Picasso.Builder(applicationContext)
+//                .loggingEnabled(true).indicatorsEnabled(true)
                 .downloader(OkHttpDownloader(httpClient))
                 .listener { _, uri, e ->
                     e.printStackTrace()
