@@ -3,7 +3,6 @@ package com.appham.sharemarks.utils
 import android.content.res.Configuration
 import android.os.Build
 import android.util.Log
-import android.util.Patterns
 import com.appham.sharemarks.BuildConfig
 import java.net.MalformedURLException
 import java.net.URL
@@ -15,8 +14,9 @@ class Utils {
 
     companion object {
 
+        val regex = Regex("(https?)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]")
+
         fun extractUrl(sharedText: String): URL? {
-            val regex = Regex(Patterns.WEB_URL.pattern())
             val url = regex.findAll(sharedText, 0)
                     .filter { s -> s.value.matches(Regex("(?i)http.*")) }
             try {

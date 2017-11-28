@@ -111,7 +111,7 @@ class MarksPresenter(private val view: MarksContract.View,
     }
     //endregion
 
-    private fun handleSendText(sharedText: String?, referrer: String?) {
+    fun handleSendText(sharedText: String?, referrer: String?) {
         if (sharedText != null) {
 
             // get url from text
