@@ -20,7 +20,7 @@ class Utils {
             val url = regex.findAll(sharedText, 0)
                     .filter { s -> s.value.matches(Regex("(?i)http.*")) }
             try {
-                return URL(url.elementAt(0).value)
+                if (url.any()) return URL(url.elementAt(0).value)
             } catch (e: MalformedURLException) {
                 e.printStackTrace()
             }

@@ -22,5 +22,10 @@ class MarksPresenterTest {
         verify(presenter).handleSendText("http://appham.com", "x")
     }
 
+    @Test
+    fun `Verify handleSendText method is called correctly if no url shared`() {
+        presenter.handleSharedData(Intent.ACTION_SEND, "text/plain", "no url here..", "x")
+        verify(presenter).handleSendText("no url here..", "x")
+    }
 
 }
