@@ -79,25 +79,18 @@ class MarksActivity : AppCompatActivity(), MarksContract.View, NavigationView.On
                 .commit()
         supportFragmentManager.executePendingTransactions()
 
-        // set Referrer
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-            if (getReferrer() != null) {
-                referrer = getReferrer()!!.host
-            }
-        }
-
         // setup presenter
         presenter = MarksPresenter(this, MarksDataSource(this), marksFragment.getMarksAdapter().marks)
 
         // Get intent, action and MIME type and handle it in presenter
         if (savedInstanceState == null) {
-            presenter.handleSharedData(intent.action, intent.type,
-                    intent.getStringExtra(Intent.EXTRA_TEXT), referrer)
+            handleIntent(intent)
         }
 
         currentFilter = getString(R.string.all)
         updateAppTitleToFilter()
     }
+
     //endregion
 
     //region Activity listener methods
@@ -107,6 +100,11 @@ class MarksActivity : AppCompatActivity(), MarksContract.View, NavigationView.On
         } else {
             drawer.openDrawer(GravityCompat.START)
         }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        handleIntent(intent)
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -175,5 +173,21 @@ class MarksActivity : AppCompatActivity(), MarksContract.View, NavigationView.On
         }
     }
     //endregion
+
+    private fun handleIntent(intent: Intent?) {
+        if (intent != null) {
+            initReferrer()
+            presenter.handleSharedData(intent.action, intent.type,
+                    intent.getStringExtra(Intent.EXTRA_TEXT), referrer)
+        }
+    }
+
+    private fun initReferrer() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            if (getReferrer() != null) {
+                referrer = getReferrer()!!.host
+            }
+        }
+    }
 
 }
