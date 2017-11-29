@@ -38,6 +38,9 @@ class HtmlManager {
                     .header(acceptLang, Locale.getDefault().language)
                     .get()
 
+            //set domain to the redirected one
+            item.domain = URL(doc.location()).host
+
             val title = item.title
             if (StringUtil.isBlank(title) ||
                     (title != null && title.matches(Regex(Patterns.WEB_URL.pattern())))) {
@@ -45,7 +48,7 @@ class HtmlManager {
             }
             if (StringUtil.isBlank(item.content)) item.content = parseContent(doc)
             if (StringUtil.isBlank(item.imageUrl) || "null".equals(item.imageUrl)) {
-                item.imageUrl = parseImgUrl(url, doc, userAgentStr).toString()
+                item.imageUrl = parseImgUrl(doc, userAgentStr).toString()
             }
 
             subscriber.onNext(item)
@@ -69,7 +72,9 @@ class HtmlManager {
     /**
      * _Desperately_ tries to find a proper image url in the given html doc
      */
-    private fun parseImgUrl(pageUrl: URL, doc: Document, uaStr: String): URL? {
+    private fun parseImgUrl(doc: Document, uaStr: String): URL? {
+
+        val pageUrl = URL(doc.location())
 
         Log.d(TAG, "parsing url: " + pageUrl)
         Log.d(TAG, " --> with ua string: " + uaStr)
@@ -106,21 +111,20 @@ class HtmlManager {
                     .userAgent(tabUaStr)
                     .header(acceptLang, Locale.getDefault().language)
                     .get()
-            return parseImgUrl(pageUrl, newDoc, tabUaStr)
+            return parseImgUrl(newDoc, tabUaStr)
         } else if (uaStr.contains("Tablet")) { // Try with desktop ua string with canonical url
             val canonicalStr = doc.select("link[rel='canonical']")?.attr("href")
             if (canonicalStr?.isNotBlank() == true) {
                 return try {
-                    val canonical = URL(canonicalStr)
-                    val newDoc = Jsoup.connect(canonical.toString())
+                    val newDoc = Jsoup.connect(canonicalStr)
                             .followRedirects(true)
                             .userAgent(deskUaStr)
                             .header(acceptLang, Locale.getDefault().language)
                             .get()
-                    parseImgUrl(canonical, newDoc, deskUaStr)
+                    parseImgUrl(newDoc, deskUaStr)
                 } catch (e: Exception) {
                     e.printStackTrace()
-                    parseImgUrl(pageUrl, doc, deskUaStr)
+                    parseImgUrl(doc, deskUaStr)
                 }
             }
         }
