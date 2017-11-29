@@ -19,8 +19,8 @@ class MarksFragment : Fragment() {
         const val TAG: String = "MarksFragment"
     }
 
-    private var marksList: RecyclerView? = null
-    private var marksLayoutManager: LinearLayoutManager? = null
+    private lateinit var marksList: RecyclerView
+    private lateinit var marksLayoutManager: LinearLayoutManager
     private val marksAdapter = MarksAdapter()
     private val marksActivity: MarksActivity by lazy { activity as MarksActivity }
 
@@ -37,13 +37,13 @@ class MarksFragment : Fragment() {
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
-        marksList!!.setHasFixedSize(true)
+        marksList.setHasFixedSize(true)
 
         // use a linear layout manager
         marksLayoutManager = LinearLayoutManager(activity)
-        marksList!!.layoutManager = marksLayoutManager
+        marksList.layoutManager = marksLayoutManager
 
-        marksList!!.adapter = marksAdapter
+        marksList.adapter = marksAdapter
 
         setupDeleteBySwipe()
 
