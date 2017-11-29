@@ -64,14 +64,12 @@ class MarksActivity : AppCompatActivity(), MarksContract.View, NavigationView.On
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeButtonEnabled(true)
 
-
-
         navigationView = findViewById<NavigationView>(R.id.navView)
         navigationView.setNavigationItemSelectedListener(this)
-        navFilter = navigationView.menu.addSubMenu("FILTER:")
+        navFilter = navigationView.menu.addSubMenu(getString(R.string.filter))
         navFilter.add(getString(R.string.all)).setIcon(android.R.drawable.ic_menu_search)
         navFilter.add(getString(R.string.deleted)).setIcon(android.R.drawable.ic_menu_delete)
-        navDomains = navigationView.menu.addSubMenu("BY DOMAINS:")
+        navDomains = navigationView.menu.addSubMenu(getString(R.string.by_websites))
 
         // add list fragment
         marksFragment = MarksFragment()
@@ -119,7 +117,7 @@ class MarksActivity : AppCompatActivity(), MarksContract.View, NavigationView.On
                 getString(R.string.deleted)
             }
             else -> {
-                presenter.queryMarksByDomain(item.title.toString())
+                presenter.queryMarksByDomain(item.title.toString(), 0)
                 item.title.toString()
             }
         }
@@ -134,8 +132,13 @@ class MarksActivity : AppCompatActivity(), MarksContract.View, NavigationView.On
 
     override fun removeMarkItem(item: MarkItem) = runOnUiThread { marksFragment.removeItem(item) }
 
-    override fun addDrawerItem(item: String) =
-            runOnUiThread { navDomains.add(item).setIcon(android.R.drawable.ic_menu_search) }
+    override fun addDrawerItems(items: List<String>) =
+            runOnUiThread {
+                navDomains.clear()
+                items.forEach { item ->
+                    navDomains.add(item).setIcon(android.R.drawable.ic_menu_search)
+                }
+            }
 
     override fun notifyDataChanged() =
             runOnUiThread { marksFragment.getMarksAdapter().notifyDataSetChanged() }
@@ -177,6 +180,7 @@ class MarksActivity : AppCompatActivity(), MarksContract.View, NavigationView.On
     private fun handleIntent(intent: Intent?) {
         if (intent != null) {
             initReferrer()
+            presenter.syncMarksFromDb(0)
             presenter.handleSharedData(intent.action, intent.type,
                     intent.getStringExtra(Intent.EXTRA_TEXT), referrer)
         }

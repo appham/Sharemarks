@@ -51,21 +51,23 @@ class MarksPresenter(private val view: MarksContract.View,
     }
 
     override fun updateDrawerItems() {
-        for (item: MarkItem in marks) {
-            updateDrawerItem(item)
+        marks.forEach { item ->
+            if (!item.deleted && !drawerItems.contains(item.domain))
+                drawerItems.add(item.domain)
         }
+        drawerItems.sort()
+        view.addDrawerItems(drawerItems)
     }
 
     override fun updateDrawerItem(item: MarkItem) {
         if (!drawerItems.contains(item.domain)) {
-            drawerItems.add(item.domain)
-            view.addDrawerItem(item.domain)
+            updateDrawerItems()
         }
     }
 
-    override fun queryMarksByDomain(domain: String) {
+    override fun queryMarksByDomain(domain: String, deleted: Int) {
         marks.clear()
-        marks.addAll(dataSource.getMarksByDomain(domain))
+        marks.addAll(dataSource.getMarksByDomain(domain, deleted))
         updateDrawerItems()
         view.notifyDataChanged()
     }
@@ -152,6 +154,7 @@ class MarksPresenter(private val view: MarksContract.View,
 
     private fun removeItemView(item: MarkItem) {
         view.removeMarkItem(item)
+        drawerItems.remove(item.domain)
         updateDrawerItems()
     }
 

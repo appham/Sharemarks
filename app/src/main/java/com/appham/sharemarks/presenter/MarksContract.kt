@@ -11,7 +11,7 @@ interface MarksContract {
     interface View {
         fun addMarkItem(item: MarkItem)
         fun removeMarkItem(item: MarkItem)
-        fun addDrawerItem(item: String)
+        fun addDrawerItems(items: List<String>)
         fun notifyDataChanged()
         fun notifyItemChanged(index: Int)
         fun showToast(resId: Int)
@@ -26,7 +26,7 @@ interface MarksContract {
         fun updateDrawerItems()
         fun updateDrawerItem(item: MarkItem)
         fun syncMarksFromDb(deleted: Int)
-        fun queryMarksByDomain(domain: String)
+        fun queryMarksByDomain(domain: String, deleted: Int)
         fun setMarkDeleted(item: MarkItem, toDelete: Boolean): Boolean
     }
 
@@ -34,7 +34,7 @@ interface MarksContract {
         fun open()
         fun close()
         fun getMarks(deleted: Int): MutableList<MarkItem>
-        fun getMarksByDomain(domain: String): MutableList<MarkItem>
+        fun getMarksByDomain(domain: String, deleted: Int): MutableList<MarkItem>
         fun putMark(item: MarkItem): Long
         fun setMarkDeleted(item: MarkItem, toDelete: Boolean): Int
         fun dropItem(item: MarkItem): Boolean

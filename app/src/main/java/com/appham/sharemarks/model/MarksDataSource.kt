@@ -27,9 +27,10 @@ class MarksDataSource(context: Context) : MarksContract.Model {
             cupboard(db).query(MarkItem::class.java)
                     .withSelection("deleted == ?", deleted.toString()).list().asReversed()
 
-    override fun getMarksByDomain(domain: String): MutableList<MarkItem> =
+    override fun getMarksByDomain(domain: String, deleted: Int): MutableList<MarkItem> =
             cupboard(db).query(MarkItem::class.java)
-                    .withSelection("domain = ?", domain).list().asReversed()
+                    .withSelection("domain = ? AND deleted = ?", domain, deleted.toString()).list()
+                    .asReversed()
 
     override fun putMark(item: MarkItem): Long = cupboard(db).put(item)
 

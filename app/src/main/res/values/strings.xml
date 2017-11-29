@@ -8,4 +8,6 @@
     <string name="mark_restored">Mark restored </string>
     <string name="undo">Undo</string>
     <string name="mark_dropped">Mark dropped permanently</string>
+    <string name="filter">FILTER:</string>
+    <string name="by_websites">BY WEBSITES:</string>
 </resources>
