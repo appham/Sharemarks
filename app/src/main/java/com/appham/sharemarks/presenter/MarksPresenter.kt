@@ -27,13 +27,6 @@ class MarksPresenter(private val view: MarksContract.View,
         syncMarksFromDb(0)
     }
 
-    //region MarksContract methods
-    override fun parseItem(): MarkItem {
-        //dummy test item for now:
-        return MarkItem.create("Another Test title", "that is some really awesome content!",
-                "http://appham.com", URL("http://google.com"), URL("http://img"))
-    }
-
     override fun handleSharedData(action: String?, type: String?, sharedText: String?, referrer: String?) {
         if (Intent.ACTION_SEND == action && type != null) {
             if ("text/plain" == type) {

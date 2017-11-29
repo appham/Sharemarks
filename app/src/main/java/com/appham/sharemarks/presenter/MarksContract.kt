@@ -22,7 +22,6 @@ interface MarksContract {
     }
 
     interface Presenter {
-        fun parseItem(): MarkItem
         fun handleSharedData(action: String?, type: String?, sharedText: String?, referrer: String?)
         fun updateDrawerItems()
         fun updateDrawerItem(item: MarkItem)

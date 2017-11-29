@@ -18,7 +18,8 @@ data class MarkItem(var title: String?,
     companion object Factory {
 
         fun create(title: String?, content: String?, referrer: String?, url: URL, imageUrl: URL?): MarkItem =
-                MarkItem(title, content, referrer, url.toString(), imageUrl.toString(), url.host)
+                MarkItem(title, content, referrer, url.toString(), imageUrl.toString(),
+                        url.host.replace(Regex("^www."), ""))
 
         fun buildMarkItem(sharedText: String, url: URL, imageUrl: URL?, referrer: String?): MarkItem {
 
