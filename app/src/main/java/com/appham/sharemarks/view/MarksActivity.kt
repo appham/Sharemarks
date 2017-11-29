@@ -11,6 +11,7 @@ import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.view.Gravity
 import android.view.MenuItem
 import android.view.SubMenu
 import android.view.View
@@ -109,22 +110,23 @@ class MarksActivity : AppCompatActivity(), MarksContract.View, NavigationView.On
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when (item.title.toString()) {
+        currentFilter = when (item.title.toString()) {
             getString(R.string.all) -> {
                 presenter.syncMarksFromDb(0)
-                currentFilter = getString(R.string.all)
+                getString(R.string.all)
             }
 
             getString(R.string.deleted) -> {
                 presenter.syncMarksFromDb(1)
-                currentFilter = getString(R.string.deleted)
+                getString(R.string.deleted)
             }
             else -> {
                 presenter.queryMarksByDomain(item.title.toString())
-                currentFilter = item.title.toString()
+                item.title.toString()
             }
         }
         updateAppTitleToFilter()
+        drawer.closeDrawer(Gravity.START)
         return true
     }
     //region
