@@ -8,7 +8,9 @@ import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
+import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.SubMenu
 import android.view.View
@@ -19,6 +21,7 @@ import com.appham.sharemarks.model.MarksDataSource
 import com.appham.sharemarks.presenter.HtmlManager
 import com.appham.sharemarks.presenter.MarksContract
 import com.appham.sharemarks.presenter.MarksPresenter
+
 
 class MarksActivity : AppCompatActivity(), MarksContract.View, NavigationView.OnNavigationItemSelectedListener {
 
@@ -48,8 +51,19 @@ class MarksActivity : AppCompatActivity(), MarksContract.View, NavigationView.On
         // generate a ua string for loading websites
         HtmlManager.initUserAgentStr(packageName, resources.configuration.screenLayout)
 
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+
         // navigation drawer
         drawer = findViewById<View>(R.id.drawerLayout) as DrawerLayout
+        val toggle = ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.app_name, R.string.all)
+        drawer.addDrawerListener(toggle)
+        toggle.syncState()
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeButtonEnabled(true)
+
+
 
         navigationView = findViewById<NavigationView>(R.id.navView)
         navigationView.setNavigationItemSelectedListener(this)

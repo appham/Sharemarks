@@ -1,38 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout
-    android:id="@+id/drawerLayout"
+<RelativeLayout
+    android:id="@+id/layMain"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    android:background="@drawable/white_transparent_bg"
-    tools:openDrawer="start">
+    android:layout_width="match_parent"
+    android:fitsSystemWindows="true">
 
-    <!--main content-->
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/marksContent"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/layAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:popupTheme="@style/AppTheme.PopupOverlay"/>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/drawerLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.appham.sharemarks.view.MarksActivity">
-
-
-        <FrameLayout
-            android:id="@+id/frameMarks"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        </FrameLayout>
-    </android.support.constraint.ConstraintLayout>
-
-    <android.support.design.widget.NavigationView
-        android:id="@+id/navView"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        android:background="@android:color/white"/>
-    <!--app:headerLayout="@layout/nav_header_main"-->
-    <!--app:menu="@menu/activity_main_drawer"/>-->
+        android:background="@drawable/white_transparent_bg"
+        tools:openDrawer="start"
+        android:layout_below="@+id/layAppBar">
 
-</android.support.v4.widget.DrawerLayout>
+        <!--main content-->
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/marksContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context="com.appham.sharemarks.view.MarksActivity">
+
+            <FrameLayout
+                android:id="@+id/frameMarks"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            </FrameLayout>
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.design.widget.NavigationView
+            android:id="@+id/navView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:fitsSystemWindows="true"
+            android:background="@android:color/white"/>
+        <!--app:headerLayout="@layout/nav_header_main"-->
+        <!--app:menu="@menu/activity_main_drawer"/>-->
+
+    </android.support.v4.widget.DrawerLayout>
+</RelativeLayout>
