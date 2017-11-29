@@ -69,7 +69,7 @@ class MarksActivity : AppCompatActivity(), MarksContract.View, NavigationView.On
         navigationView = findViewById<NavigationView>(R.id.navView)
         navigationView.setNavigationItemSelectedListener(this)
         navFilter = navigationView.menu.addSubMenu("FILTER:")
-        navFilter.add(getString(R.string.all)).setIcon(R.mipmap.ic_launcher_foreground)
+        navFilter.add(getString(R.string.all)).setIcon(android.R.drawable.ic_menu_search)
         navFilter.add(getString(R.string.deleted)).setIcon(android.R.drawable.ic_menu_delete)
         navDomains = navigationView.menu.addSubMenu("BY DOMAINS:")
 
@@ -137,7 +137,7 @@ class MarksActivity : AppCompatActivity(), MarksContract.View, NavigationView.On
     override fun removeMarkItem(item: MarkItem) = runOnUiThread { marksFragment.removeItem(item) }
 
     override fun addDrawerItem(item: String) =
-            runOnUiThread { navDomains.add(item).setIcon(R.mipmap.ic_launcher_foreground) }
+            runOnUiThread { navDomains.add(item).setIcon(android.R.drawable.ic_menu_search) }
 
     override fun notifyDataChanged() =
             runOnUiThread { marksFragment.getMarksAdapter().notifyDataSetChanged() }
