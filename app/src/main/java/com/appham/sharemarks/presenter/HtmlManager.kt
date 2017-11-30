@@ -39,7 +39,7 @@ class HtmlManager {
                     .get()
 
             //set domain to the redirected one
-            item.domain = URL(doc.location()).host
+            item.domain = URL(doc.location()).host.replace(Regex("^www."), "")
 
             val title = item.title
             if (StringUtil.isBlank(title) ||
