@@ -22,6 +22,7 @@ import com.appham.sharemarks.model.MarksDataSource
 import com.appham.sharemarks.presenter.HtmlManager
 import com.appham.sharemarks.presenter.MarksContract
 import com.appham.sharemarks.presenter.MarksPresenter
+import com.google.firebase.analytics.FirebaseAnalytics
 
 
 class MarksActivity : AppCompatActivity(), MarksContract.View, NavigationView.OnNavigationItemSelectedListener {
@@ -43,6 +44,8 @@ class MarksActivity : AppCompatActivity(), MarksContract.View, NavigationView.On
     private var snackbar: Snackbar? = null
 
     private lateinit var currentFilter: String
+
+    private lateinit var mFirebaseAnalytics: FirebaseAnalytics
 
     //region Activity lifecycle methods
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,6 +90,9 @@ class MarksActivity : AppCompatActivity(), MarksContract.View, NavigationView.On
 
         currentFilter = getString(R.string.all)
         updateAppTitleToFilter()
+
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
     }
 
     //endregion

@@ -1,6 +1,8 @@
 package com.appham.sharemarks.view
 
-import android.app.Application
+import android.content.Context
+import android.support.multidex.MultiDex
+import android.support.multidex.MultiDexApplication
 import android.util.Log
 import com.squareup.okhttp.OkHttpClient
 import com.squareup.picasso.OkHttpDownloader
@@ -10,7 +12,7 @@ import java.util.concurrent.TimeUnit
 /**
  * @author thomas
  */
-class MarksApplication : Application() {
+class MarksApplication : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
 
@@ -28,5 +30,10 @@ class MarksApplication : Application() {
                 .build()
         Picasso.setSingletonInstance(picasso)
 
+    }
+
+    override fun attachBaseContext(base: Context) {
+        super.attachBaseContext(base)
+        MultiDex.install(this)
     }
 }

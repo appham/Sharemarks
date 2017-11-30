@@ -13,6 +13,7 @@ android {
         versionCode 1
         versionName "0." + versionCode
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -27,6 +28,7 @@ android {
 
 ext {
     support_lib_version = "27.0.1"
+    play_services_version = "11.6.0"
 }
 
 dependencies {
@@ -37,6 +39,8 @@ dependencies {
     implementation "com.android.support:design:$support_lib_version"
     implementation "com.android.support:recyclerview-v7:$support_lib_version"
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation "com.google.firebase:firebase-core:$play_services_version"
+    implementation 'com.android.support:multidex:1.0.1'
     implementation "com.jskierbi:cupboard-kotlin:+"
     implementation 'io.reactivex.rxjava2:rxkotlin:+'
     implementation 'org.jsoup:jsoup:1.9.2'
@@ -70,3 +74,6 @@ dependencies {
         exclude module: 'design'
     }
 }
+
+
+apply plugin: 'com.google.gms.google-services'

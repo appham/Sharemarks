@@ -12,6 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".view.MarksActivity"
             android:launchMode="singleTask">
@@ -57,6 +58,7 @@
                 <data android:pathPattern="/.*"/>
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>
