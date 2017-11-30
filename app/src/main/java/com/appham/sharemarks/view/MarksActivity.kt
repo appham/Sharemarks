@@ -181,8 +181,18 @@ class MarksActivity : AppCompatActivity(), MarksContract.View, NavigationView.On
         if (intent != null) {
             initReferrer()
             presenter.syncMarksFromDb(0)
-            presenter.handleSharedData(intent.action, intent.type,
-                    intent.getStringExtra(Intent.EXTRA_TEXT), referrer)
+
+            var type: String? = intent.type
+            val sharedText: String? = if (intent.dataString.isNullOrBlank()) { // from share
+                intent.getStringExtra(Intent.EXTRA_TEXT)
+            } else if (intent.data.scheme.startsWith("http", true)) { // from browsable
+                type = "text/html"
+                intent.dataString
+            } else {
+                null
+            }
+            presenter.handleSharedData(intent.action, type,
+                    sharedText, referrer)
         }
     }
 

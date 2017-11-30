@@ -28,8 +28,8 @@ class MarksPresenter(private val view: MarksContract.View,
     }
 
     override fun handleSharedData(action: String?, type: String?, sharedText: String?, referrer: String?) {
-        if (Intent.ACTION_SEND == action && type != null) {
-            if ("text/plain" == type) {
+        if ((Intent.ACTION_SEND == action || Intent.ACTION_VIEW == action) && type != null) {
+            if (type.startsWith("text/", true)) {
                 handleSendText(sharedText, referrer) // Handle text being sent
             } else if (type.startsWith("image/")) {
                 //                    handleSendImage(sharedText, wDb) // Handle single image being sent
