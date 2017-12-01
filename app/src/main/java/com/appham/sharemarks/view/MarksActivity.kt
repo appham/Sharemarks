@@ -2,6 +2,8 @@ package com.appham.sharemarks.view
 
 import android.content.ComponentName
 import android.content.Intent
+import android.content.pm.ResolveInfo
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
@@ -18,6 +20,7 @@ import android.view.MenuItem
 import android.view.SubMenu
 import android.view.View
 import android.widget.Toast
+import com.appham.sharemarks.BuildConfig
 import com.appham.sharemarks.R
 import com.appham.sharemarks.model.MarkItem
 import com.appham.sharemarks.model.MarksDataSource
@@ -174,27 +177,12 @@ class MarksActivity : AppCompatActivity(), MarksContract.View, NavigationView.On
         try {
 
             // filter out sharemarks as option to share
-            val targetedShareIntents = mutableListOf<Intent>()
             val shareIntent = Intent(android.content.Intent.ACTION_SEND)
             shareIntent.type = "text/plain"
             val resInfos = packageManager.queryIntentActivities(shareIntent, 0)
             if (!resInfos.isEmpty()) {
-                for (resolveInfo in resInfos) {
-                    val component = ComponentName(resolveInfo.activityInfo.packageName,
-                            resolveInfo.activityInfo.name)
-                    if (!TextUtils.equals(component.packageName, this.packageName)) {
-                        val targetedShareIntent = Intent(android.content.Intent.ACTION_SEND)
-                        targetedShareIntent.type = "text/plain"
-                        targetedShareIntent.putExtra(
-                                android.content.Intent.EXTRA_SUBJECT, item.title)
-                        targetedShareIntent.putExtra(
-                                android.content.Intent.EXTRA_TITLE, item.title)
-                        targetedShareIntent.putExtra(
-                                android.content.Intent.EXTRA_TEXT, item.title + " " + item.url)
-                        targetedShareIntent.component = component
-                        targetedShareIntents.add(targetedShareIntent)
-                    }
-                }
+                val targetedShareIntents = getShareIntents(resInfos, item)
+
                 val chooserIntent = Intent.createChooser(targetedShareIntents.removeAt(0),
                         getString(R.string.share_mark) + " - " + item.domain)
                 chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS,
@@ -232,6 +220,52 @@ class MarksActivity : AppCompatActivity(), MarksContract.View, NavigationView.On
             if (getReferrer() != null) {
                 referrer = getReferrer()!!.host
             }
+        }
+    }
+
+    companion object {
+
+        /**
+         * share intents without sharemarks option
+         */
+        internal fun getShareIntents(resInfos: MutableList<ResolveInfo>,
+                                     item: MarkItem): MutableList<Intent> {
+            val targetedShareIntents = mutableListOf<Intent>()
+            for (resolveInfo in resInfos) {
+                val component = ComponentName(resolveInfo.activityInfo.packageName,
+                        resolveInfo.activityInfo.name)
+                if (!TextUtils.equals(component.packageName, BuildConfig.APPLICATION_ID)) {
+                    val targetedShareIntent = Intent(Intent.ACTION_SEND)
+                    targetedShareIntent.type = "text/plain"
+                    targetedShareIntent.putExtra(
+                            Intent.EXTRA_SUBJECT, item.title)
+                    targetedShareIntent.putExtra(
+                            Intent.EXTRA_TITLE, item.title)
+                    targetedShareIntent.putExtra(
+                            Intent.EXTRA_TEXT, item.title + " " + item.url)
+                    targetedShareIntent.component = component
+                    targetedShareIntents.add(targetedShareIntent)
+                }
+            }
+            return targetedShareIntents
+        }
+
+        /**
+         * browser intents without sharemarks option
+         */
+        internal fun getBrowserIntents(resInfos: MutableList<ResolveInfo>,
+                                       uri: Uri): MutableList<Intent> {
+            val targetedShareIntents = mutableListOf<Intent>()
+            for (resolveInfo in resInfos) {
+                val component = ComponentName(resolveInfo.activityInfo.packageName,
+                        resolveInfo.activityInfo.name)
+                if (!TextUtils.equals(component.packageName, BuildConfig.APPLICATION_ID)) {
+                    val targetedShareIntent = Intent(Intent.ACTION_VIEW, uri)
+                    targetedShareIntent.component = component
+                    targetedShareIntents.add(targetedShareIntent)
+                }
+            }
+            return targetedShareIntents
         }
     }
 

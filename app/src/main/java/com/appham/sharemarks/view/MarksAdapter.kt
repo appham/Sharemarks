@@ -74,7 +74,14 @@ class MarksAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
             // add click listener to open browser
             holder.itemView.setOnClickListener {
-                context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(item.url)))
+
+                val uri = Uri.parse(item.url)
+                val viewIntent = Intent(Intent.ACTION_VIEW, Uri.parse(item.url))
+                val resInfos = context.packageManager.queryIntentActivities(viewIntent, 0)
+                val viewIntents = MarksActivity.getBrowserIntents(resInfos, uri)
+
+                if (viewIntents.isNotEmpty()) context.startActivity(viewIntents.removeAt(0))
+
                 //TODO: open in a webview instead
             }
 
@@ -93,8 +100,8 @@ class MarksAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         return marks.size
     }
 
-    fun addItem(markItem: MarkItem) {
-        marks.add(0, markItem)
+    fun addItem(item: MarkItem) {
+        marks.add(0, item)
     }
 
     fun removeItem(item: MarkItem) {
