@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.res.Resources
 import android.graphics.drawable.RotateDrawable
 import android.net.Uri
+import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
@@ -18,8 +19,10 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.appham.sharemarks.R
+import com.appham.sharemarks.model.Analytics
 import com.appham.sharemarks.model.MarkItem
 import com.appham.sharemarks.presenter.MarksContract
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.squareup.picasso.Picasso
 import jp.wasabeef.picasso.transformations.RoundedCornersTransformation
 
@@ -33,6 +36,8 @@ class MarksAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private lateinit var context: Context
 
     private val screenWidthPx by lazy { Resources.getSystem().displayMetrics.widthPixels }
+
+    private val firebaseAnalytics by lazy { FirebaseAnalytics.getInstance(context) }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         context = parent.context
@@ -82,11 +87,30 @@ class MarksAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
                 if (viewIntents.isNotEmpty()) context.startActivity(viewIntents.removeAt(0))
 
+                // log event
+                val bundle = Bundle()
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, item._id.toString())
+                bundle.putString(Analytics.DOMAIN.get(), item.domain)
+                bundle.putString(Analytics.REFERRER.get(), item.referrer)
+                bundle.putString(Analytics.DELETED.get(), item.deleted.toString())
+                bundle.putString(Analytics.ACTION.get(), Analytics.CLICK_MARK.get())
+                firebaseAnalytics.logEvent(Analytics.OPEN_BROWSER.get(), bundle)
+
                 //TODO: open in a webview instead
             }
 
             holder.itemView.setOnLongClickListener {
                 (context as MarksContract.View).showShareChooser(item)
+
+                // log event
+                val bundle = Bundle()
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, item._id.toString())
+                bundle.putString(Analytics.DOMAIN.get(), item.domain)
+                bundle.putString(Analytics.REFERRER.get(), item.referrer)
+                bundle.putString(Analytics.DELETED.get(), item.deleted.toString())
+                bundle.putString(Analytics.ACTION.get(), Analytics.LONG_CLICK_MARK.get())
+                firebaseAnalytics.logEvent(Analytics.SHARE_MARK.get(), bundle)
+
                 true
             }
 

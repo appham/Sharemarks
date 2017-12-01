@@ -9,7 +9,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.appham.sharemarks.R
+import com.appham.sharemarks.model.Analytics
 import com.appham.sharemarks.model.MarkItem
+import com.google.firebase.analytics.FirebaseAnalytics
 
 /**
  * @author thomas
@@ -23,6 +25,7 @@ class MarksFragment : Fragment() {
     private lateinit var marksLayoutManager: LinearLayoutManager
     private val marksAdapter = MarksAdapter()
     private val marksActivity: MarksActivity by lazy { activity as MarksActivity }
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     //region lifecycle methods
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -47,6 +50,9 @@ class MarksFragment : Fragment() {
 
         setupDeleteBySwipe()
 
+        // Obtain the FirebaseAnalytics instance.
+        firebaseAnalytics = FirebaseAnalytics.getInstance(marksActivity)
+
         super.onViewCreated(view, savedInstanceState)
     }
     //endregion
@@ -62,13 +68,46 @@ class MarksFragment : Fragment() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
                 val item = viewHolder.itemView.tag as MarkItem
-                if (swipeDir == ItemTouchHelper.LEFT) { //delete on left swipe
-                    marksActivity.presenter.setMarkDeleted(item, true)
-                } else if (item.deleted) { //right swipe for deleted item restores it
-                    marksActivity.presenter.setMarkDeleted(item, false)
-                } else { // right swipe on non-deleted item shares it
-                    marksActivity.showShareChooser(item)
-                    marksAdapter.notifyItemChanged(viewHolder.adapterPosition)
+                when {
+                    swipeDir == ItemTouchHelper.LEFT -> {//delete on left swipe
+
+                        // log event
+                        val bundle = Bundle()
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, item._id.toString())
+                        bundle.putString(Analytics.DOMAIN.get(), item.domain)
+                        bundle.putString(Analytics.REFERRER.get(), item.referrer)
+                        bundle.putString(Analytics.DELETED.get(), item.deleted.toString())
+                        bundle.putString(Analytics.ACTION.get(), Analytics.SWIPE_LEFT.get())
+                        firebaseAnalytics.logEvent(Analytics.DELETE_MARK.get(), bundle)
+
+                        marksActivity.presenter.setMarkDeleted(item, true)
+                    }
+
+                    item.deleted -> {//right swipe for deleted item restores it
+                        marksActivity.presenter.setMarkDeleted(item, false)
+
+                        // log event
+                        val bundle = Bundle()
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, item._id.toString())
+                        bundle.putString(Analytics.DOMAIN.get(), item.domain)
+                        bundle.putString(Analytics.REFERRER.get(), item.referrer)
+                        bundle.putString(Analytics.DELETED.get(), item.deleted.toString())
+                        bundle.putString(Analytics.ACTION.get(), Analytics.SWIPE_RIGHT.get())
+                        firebaseAnalytics.logEvent(Analytics.RESTORE_MARK.get(), bundle)
+                    }
+                    else -> { // right swipe on non-deleted item shares it
+                        marksActivity.showShareChooser(item)
+                        marksAdapter.notifyItemChanged(viewHolder.adapterPosition)
+
+                        // log event
+                        val bundle = Bundle()
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, item._id.toString())
+                        bundle.putString(Analytics.DOMAIN.get(), item.domain)
+                        bundle.putString(Analytics.REFERRER.get(), item.referrer)
+                        bundle.putString(Analytics.DELETED.get(), item.deleted.toString())
+                        bundle.putString(Analytics.ACTION.get(), Analytics.SWIPE_RIGHT.get())
+                        firebaseAnalytics.logEvent(Analytics.SHARE_MARK.get(), bundle)
+                    }
                 }
             }
         }

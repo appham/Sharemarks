@@ -22,6 +22,7 @@ import android.view.View
 import android.widget.Toast
 import com.appham.sharemarks.BuildConfig
 import com.appham.sharemarks.R
+import com.appham.sharemarks.model.Analytics
 import com.appham.sharemarks.model.MarkItem
 import com.appham.sharemarks.model.MarksDataSource
 import com.appham.sharemarks.presenter.HtmlManager
@@ -50,7 +51,7 @@ class MarksActivity : AppCompatActivity(), MarksContract.View, NavigationView.On
 
     private lateinit var currentFilter: String
 
-    private lateinit var mFirebaseAnalytics: FirebaseAnalytics
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     //region Activity lifecycle methods
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,6 +89,9 @@ class MarksActivity : AppCompatActivity(), MarksContract.View, NavigationView.On
         // setup presenter
         presenter = MarksPresenter(this, MarksDataSource(this), marksFragment.getMarksAdapter().marks)
 
+        // Obtain the FirebaseAnalytics instance.
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this)
+
         // Get intent, action and MIME type and handle it in presenter
         if (savedInstanceState == null) {
             handleIntent(intent)
@@ -95,11 +99,7 @@ class MarksActivity : AppCompatActivity(), MarksContract.View, NavigationView.On
 
         currentFilter = getString(R.string.all)
         updateAppTitleToFilter()
-
-        // Obtain the FirebaseAnalytics instance.
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
     }
-
     //endregion
 
     //region Activity listener methods
@@ -108,6 +108,11 @@ class MarksActivity : AppCompatActivity(), MarksContract.View, NavigationView.On
             super.onBackPressed()
         } else {
             drawer.openDrawer(GravityCompat.START)
+
+            // log event
+            val bundle = Bundle()
+            bundle.putString(Analytics.ACTION.get(), Analytics.PRESS_BACK.get())
+            firebaseAnalytics.logEvent(Analytics.OPEN_NAV_DRAWER.get(), bundle)
         }
     }
 
@@ -134,6 +139,12 @@ class MarksActivity : AppCompatActivity(), MarksContract.View, NavigationView.On
         }
         updateAppTitleToFilter()
         drawer.closeDrawer(Gravity.START)
+
+        // log event
+        val bundle = Bundle()
+        bundle.putString(Analytics.FILTER.get(), currentFilter)
+        firebaseAnalytics.logEvent(Analytics.CLICK_NAV_ITEM.get(), bundle)
+
         return true
     }
     //region
@@ -212,6 +223,13 @@ class MarksActivity : AppCompatActivity(), MarksContract.View, NavigationView.On
             }
             presenter.handleSharedData(intent.action, type,
                     sharedText, referrer)
+
+            // log event
+            val bundle = Bundle()
+            bundle.putString(Analytics.INTENT_TYPE.get(), intent.type)
+            bundle.putString(Analytics.INTENT_ACTION.get(), intent.action)
+            bundle.putString(Analytics.REFERRER.get(), referrer)
+            firebaseAnalytics.logEvent(Analytics.HANDLE_INTENT.get(), bundle)
         }
     }
 

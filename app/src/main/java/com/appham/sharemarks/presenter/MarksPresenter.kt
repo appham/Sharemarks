@@ -1,12 +1,15 @@
 package com.appham.sharemarks.presenter
 
 import android.content.Intent
+import android.os.Bundle
 import android.util.Log
 import android.view.View
 import com.appham.sharemarks.R
+import com.appham.sharemarks.model.Analytics
 import com.appham.sharemarks.model.MarkItem
 import com.appham.sharemarks.model.MarksDataSource
 import com.appham.sharemarks.utils.Utils
+import com.google.firebase.analytics.FirebaseAnalytics
 import io.reactivex.schedulers.Schedulers
 import java.net.URL
 
@@ -74,8 +77,20 @@ class MarksPresenter(private val view: MarksContract.View,
 
     override fun setMarkDeleted(item: MarkItem, toDelete: Boolean): Boolean {
 
-        val undoAction = { _: View ->
+        val undoAction = { view: View ->
             setMarkDeleted(item, !toDelete)
+
+            // log event
+            val firebaseAnalytics = FirebaseAnalytics.getInstance(view.context)
+            val bundle = Bundle()
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, item._id.toString())
+            bundle.putString(Analytics.DOMAIN.get(), item.domain)
+            bundle.putString(Analytics.REFERRER.get(), item.referrer)
+            bundle.putString(Analytics.DELETED.get(), item.deleted.toString())
+            bundle.putString(Analytics.TO_DELETE.get(), toDelete.toString())
+            bundle.putString(Analytics.ACTION.get(), Analytics.CLICK_UNDO.get())
+            firebaseAnalytics.logEvent(Analytics.UNDO.get(), bundle)
+
             Unit
         }
 
