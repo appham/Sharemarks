@@ -1,9 +1,10 @@
 package com.appham.sharemarks.view
 
-import android.content.ActivityNotFoundException
+import android.content.ComponentName
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.os.Parcelable
 import android.support.design.widget.NavigationView
 import android.support.design.widget.Snackbar
 import android.support.v4.view.GravityCompat
@@ -11,6 +12,7 @@ import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.text.TextUtils
 import android.view.Gravity
 import android.view.MenuItem
 import android.view.SubMenu
@@ -170,14 +172,37 @@ class MarksActivity : AppCompatActivity(), MarksContract.View, NavigationView.On
 
     override fun showShareChooser(item: MarkItem) {
         try {
-            val intent = Intent(Intent.ACTION_SEND)
-            intent.type = "text/plain"
-            intent.putExtra(Intent.EXTRA_SUBJECT, item.title)
-            intent.putExtra(Intent.EXTRA_TITLE, item.title)
-            intent.putExtra(Intent.EXTRA_TEXT, item.title + " " + item.url)
-            startActivity(Intent.createChooser(intent, getString(R.string.share_mark) +
-                    " - " + item.domain))
-        } catch (ex: ActivityNotFoundException) {
+
+            // filter out sharemarks as option to share
+            val targetedShareIntents = mutableListOf<Intent>()
+            val shareIntent = Intent(android.content.Intent.ACTION_SEND)
+            shareIntent.type = "text/plain"
+            val resInfos = packageManager.queryIntentActivities(shareIntent, 0)
+            if (!resInfos.isEmpty()) {
+                for (resolveInfo in resInfos) {
+                    val component = ComponentName(resolveInfo.activityInfo.packageName,
+                            resolveInfo.activityInfo.name)
+                    if (!TextUtils.equals(component.packageName, this.packageName)) {
+                        val targetedShareIntent = Intent(android.content.Intent.ACTION_SEND)
+                        targetedShareIntent.type = "text/plain"
+                        targetedShareIntent.putExtra(
+                                android.content.Intent.EXTRA_SUBJECT, item.title)
+                        targetedShareIntent.putExtra(
+                                android.content.Intent.EXTRA_TITLE, item.title)
+                        targetedShareIntent.putExtra(
+                                android.content.Intent.EXTRA_TEXT, item.title + " " + item.url)
+                        targetedShareIntent.component = component
+                        targetedShareIntents.add(targetedShareIntent)
+                    }
+                }
+                val chooserIntent = Intent.createChooser(targetedShareIntents.removeAt(0),
+                        getString(R.string.share_mark) + " - " + item.domain)
+                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS,
+                        targetedShareIntents.toTypedArray<Parcelable>())
+                startActivity(chooserIntent)
+            }
+
+        } catch (ex: Exception) {
             showToast(R.string.share_mark_no_options)
         }
     }
