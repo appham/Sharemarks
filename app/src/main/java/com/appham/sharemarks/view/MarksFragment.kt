@@ -73,11 +73,12 @@ class MarksFragment : Fragment() {
 
                         // log event
                         val bundle = Bundle()
-                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, item._id.toString())
-                        bundle.putString(Analytics.DOMAIN.get(), item.domain)
-                        bundle.putString(Analytics.REFERRER.get(), item.referrer)
-                        bundle.putString(Analytics.DELETED.get(), item.deleted.toString())
-                        bundle.putString(Analytics.ACTION.get(), Analytics.SWIPE_LEFT.get())
+//                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, item._id.toString())
+//                        bundle.putString(Analytics.DOMAIN.get(), item.domain)
+//                        bundle.putString(Analytics.REFERRER.get(), item.referrer)
+//                        bundle.putString(Analytics.DELETED.get(), item.deleted.toString())
+//                        bundle.putString(Analytics.ACTION.get(), Analytics.SWIPE_LEFT.get())
+                        bundle.putString(Analytics.ITEM.get(), item.shortStr())
                         firebaseAnalytics.logEvent(Analytics.DELETE_MARK.get(), bundle)
 
                         marksActivity.presenter.setMarkDeleted(item, true)
@@ -88,11 +89,12 @@ class MarksFragment : Fragment() {
 
                         // log event
                         val bundle = Bundle()
-                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, item._id.toString())
-                        bundle.putString(Analytics.DOMAIN.get(), item.domain)
-                        bundle.putString(Analytics.REFERRER.get(), item.referrer)
-                        bundle.putString(Analytics.DELETED.get(), item.deleted.toString())
-                        bundle.putString(Analytics.ACTION.get(), Analytics.SWIPE_RIGHT.get())
+//                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, item._id.toString())
+//                        bundle.putString(Analytics.DOMAIN.get(), item.domain)
+//                        bundle.putString(Analytics.REFERRER.get(), item.referrer)
+//                        bundle.putString(Analytics.DELETED.get(), item.deleted.toString())
+//                        bundle.putString(Analytics.ACTION.get(), Analytics.SWIPE_RIGHT.get())
+                        bundle.putString(Analytics.ITEM.get(), item.shortStr())
                         firebaseAnalytics.logEvent(Analytics.RESTORE_MARK.get(), bundle)
                     }
                     else -> { // right swipe on non-deleted item shares it
@@ -101,11 +103,12 @@ class MarksFragment : Fragment() {
 
                         // log event
                         val bundle = Bundle()
-                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, item._id.toString())
-                        bundle.putString(Analytics.DOMAIN.get(), item.domain)
-                        bundle.putString(Analytics.REFERRER.get(), item.referrer)
-                        bundle.putString(Analytics.DELETED.get(), item.deleted.toString())
-                        bundle.putString(Analytics.ACTION.get(), Analytics.SWIPE_RIGHT.get())
+//                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, item._id.toString())
+//                        bundle.putString(Analytics.DOMAIN.get(), item.domain)
+//                        bundle.putString(Analytics.REFERRER.get(), item.referrer)
+//                        bundle.putString(Analytics.DELETED.get(), item.deleted.toString())
+//                        bundle.putString(Analytics.ACTION.get(), Analytics.SWIPE_RIGHT.get())
+                        bundle.putString(Analytics.ITEM.get(), item.shortStr())
                         firebaseAnalytics.logEvent(Analytics.SHARE_MARK.get(), bundle)
                     }
                 }

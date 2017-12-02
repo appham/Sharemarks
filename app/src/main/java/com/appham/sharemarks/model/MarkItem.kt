@@ -15,6 +15,13 @@ data class MarkItem(var title: String?,
 
     var _id: Long? = null
 
+    fun shortStr(): String = shortStr(100)
+
+    fun shortStr(limit: Int): String {
+        val str = "referrer: ".plus(referrer).plus(", domain: ").plus(domain).plus(", deleted: ").plus(deleted)
+        return str.slice(0 until Math.min(limit, str.length))
+    }
+
     companion object Factory {
 
         fun create(title: String?, content: String?, referrer: String?, url: URL, imageUrl: URL?): MarkItem =

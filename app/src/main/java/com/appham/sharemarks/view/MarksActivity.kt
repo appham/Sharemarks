@@ -111,7 +111,7 @@ class MarksActivity : AppCompatActivity(), MarksContract.View, NavigationView.On
 
             // log event
             val bundle = Bundle()
-            bundle.putString(Analytics.ACTION.get(), Analytics.PRESS_BACK.get())
+//            bundle.putString(Analytics.ACTION.get(), Analytics.PRESS_BACK.get())
             firebaseAnalytics.logEvent(Analytics.OPEN_NAV_DRAWER.get(), bundle)
         }
     }
@@ -226,9 +226,9 @@ class MarksActivity : AppCompatActivity(), MarksContract.View, NavigationView.On
 
             // log event
             val bundle = Bundle()
-            bundle.putString(Analytics.INTENT_TYPE.get(), intent.type)
-            bundle.putString(Analytics.INTENT_ACTION.get(), intent.action)
-            bundle.putString(Analytics.REFERRER.get(), referrer)
+//            bundle.putString(Analytics.INTENT_TYPE.get(), intent.type)
+//            bundle.putString(Analytics.INTENT_ACTION.get(), intent.action)
+//            bundle.putString(Analytics.REFERRER.get(), referrer)
             firebaseAnalytics.logEvent(Analytics.HANDLE_INTENT.get(), bundle)
         }
     }

@@ -89,11 +89,12 @@ class MarksAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
                 // log event
                 val bundle = Bundle()
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, item._id.toString())
-                bundle.putString(Analytics.DOMAIN.get(), item.domain)
-                bundle.putString(Analytics.REFERRER.get(), item.referrer)
-                bundle.putString(Analytics.DELETED.get(), item.deleted.toString())
-                bundle.putString(Analytics.ACTION.get(), Analytics.CLICK_MARK.get())
+//                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, item._id.toString())
+//                bundle.putString(Analytics.DOMAIN.get(), item.domain)
+//                bundle.putString(Analytics.REFERRER.get(), item.referrer)
+//                bundle.putString(Analytics.DELETED.get(), item.deleted.toString())
+//                bundle.putString(Analytics.ACTION.get(), Analytics.CLICK_MARK.get())
+                bundle.putString(Analytics.ITEM.get(), item.shortStr())
                 firebaseAnalytics.logEvent(Analytics.OPEN_BROWSER.get(), bundle)
 
                 //TODO: open in a webview instead
@@ -104,11 +105,12 @@ class MarksAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
                 // log event
                 val bundle = Bundle()
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, item._id.toString())
-                bundle.putString(Analytics.DOMAIN.get(), item.domain)
-                bundle.putString(Analytics.REFERRER.get(), item.referrer)
-                bundle.putString(Analytics.DELETED.get(), item.deleted.toString())
-                bundle.putString(Analytics.ACTION.get(), Analytics.LONG_CLICK_MARK.get())
+//                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, item._id.toString())
+//                bundle.putString(Analytics.DOMAIN.get(), item.domain)
+//                bundle.putString(Analytics.REFERRER.get(), item.referrer)
+//                bundle.putString(Analytics.DELETED.get(), item.deleted.toString())
+//                bundle.putString(Analytics.ACTION.get(), Analytics.LONG_CLICK_MARK.get())
+                bundle.putString(Analytics.ITEM.get(), item.shortStr())
                 firebaseAnalytics.logEvent(Analytics.SHARE_MARK.get(), bundle)
 
                 true

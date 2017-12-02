@@ -83,12 +83,12 @@ class MarksPresenter(private val view: MarksContract.View,
             // log event
             val firebaseAnalytics = FirebaseAnalytics.getInstance(view.context)
             val bundle = Bundle()
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, item._id.toString())
-            bundle.putString(Analytics.DOMAIN.get(), item.domain)
-            bundle.putString(Analytics.REFERRER.get(), item.referrer)
-            bundle.putString(Analytics.DELETED.get(), item.deleted.toString())
-            bundle.putString(Analytics.TO_DELETE.get(), toDelete.toString())
-            bundle.putString(Analytics.ACTION.get(), Analytics.CLICK_UNDO.get())
+//            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, item._id.toString())
+//            bundle.putString(Analytics.REFERRER.get(), item.referrer)
+//            bundle.putString(Analytics.DELETED.get(), item.deleted.toString())
+//            bundle.putString(Analytics.TO_DELETE.get(), toDelete.toString())
+//            bundle.putString(Analytics.ACTION.get(), Analytics.CLICK_UNDO.get())
+            bundle.putString(Analytics.ITEM.get(), item.shortStr())
             firebaseAnalytics.logEvent(Analytics.UNDO.get(), bundle)
 
             Unit
