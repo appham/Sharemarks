@@ -108,6 +108,8 @@ class MarksPresenter(private val view: MarksContract.View,
 
         val isItemModified = dataSource.setMarkDeleted(item, toDelete) > 0
 
+        item.deleted = toDelete
+
         if (isItemModified && toDelete) { //set item to deleted
             if (view.isDeletedFilter()) putAndShowItem(item) else removeItemView(item)
             view.showSnackbar(R.string.mark_moved_to_deleted, undoAction)
@@ -115,8 +117,6 @@ class MarksPresenter(private val view: MarksContract.View,
             if (view.isDeletedFilter()) removeItemView(item) else putAndShowItem(item)
             view.showSnackbar(R.string.mark_restored, undoAction)
         }
-
-        item.deleted = toDelete
 
         return isItemModified
     }
@@ -171,6 +171,7 @@ class MarksPresenter(private val view: MarksContract.View,
     private fun removeItemView(item: MarkItem) {
         view.removeMarkItem(item)
         drawerItems.remove(item.domain)
+        dataSource.putMark(item)
         updateDrawerItems()
     }
 
