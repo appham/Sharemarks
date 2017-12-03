@@ -37,6 +37,8 @@ class MarksAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val screenWidthPx by lazy { Resources.getSystem().displayMetrics.widthPixels }
 
+    private val screenHeightPx by lazy { Resources.getSystem().displayMetrics.heightPixels }
+
     private val firebaseAnalytics by lazy { FirebaseAnalytics.getInstance(context) }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -63,8 +65,8 @@ class MarksAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 animator.start()
 
                 Picasso.with(context).load(item.imageUrl)
-                        .resize(screenWidthPx / 3,
-                                screenWidthPx / 4)
+                        .resize(Math.min(screenWidthPx / 3, screenHeightPx / 2),
+                                Math.min(screenWidthPx / 4, screenHeightPx / 3))
                         .placeholder(placeholder)
                         .error(R.mipmap.ic_launcher)
                         .onlyScaleDown()
