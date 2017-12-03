@@ -140,6 +140,8 @@ class MarksActivity : AppCompatActivity(), MarksContract.View, NavigationView.On
         updateAppTitleToFilter()
         drawer.closeDrawer(Gravity.START)
 
+        scrollTo(0)
+
         // log event
         val bundle = Bundle()
         bundle.putString(Analytics.FILTER.get(), currentFilter)
@@ -205,6 +207,13 @@ class MarksActivity : AppCompatActivity(), MarksContract.View, NavigationView.On
             showToast(R.string.share_mark_no_options)
         }
     }
+
+    override fun scrollTo(pos: Int) {
+        if (marksFragment.isAdded) {
+            marksFragment.marksList.smoothScrollToPosition(pos)
+        }
+    }
+
     //endregion
 
     private fun handleIntent(intent: Intent?) {

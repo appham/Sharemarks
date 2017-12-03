@@ -21,7 +21,7 @@ class MarksFragment : Fragment() {
         const val TAG: String = "MarksFragment"
     }
 
-    private lateinit var marksList: RecyclerView
+    internal lateinit var marksList: RecyclerView
     private lateinit var marksLayoutManager: LinearLayoutManager
     private val marksAdapter = MarksAdapter()
     private val marksActivity: MarksActivity by lazy { activity as MarksActivity }

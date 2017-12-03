@@ -19,6 +19,7 @@ interface MarksContract {
         fun isDeletedFilter(): Boolean
         fun updateAppTitleToFilter()
         fun showShareChooser(item: MarkItem)
+        fun scrollTo(pos: Int)
     }
 
     interface Presenter {

@@ -44,6 +44,7 @@ class MarksPresenter(private val view: MarksContract.View,
         } else {
             // Handle other intents, such as being started from the home screen
         }
+        view.scrollTo(0)
     }
 
     override fun syncMarksFromDb(deleted: Int) {
