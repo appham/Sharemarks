@@ -41,6 +41,8 @@ class MarksAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val firebaseAnalytics by lazy { FirebaseAnalytics.getInstance(context) }
 
+    val utmStr = "utm_source=sharemarks&utm_medium=appham.com&utm_campaign=android"
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         context = parent.context
         val view = LayoutInflater.from(context)
@@ -82,8 +84,16 @@ class MarksAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             // add click listener to open browser
             holder.itemView.setOnClickListener {
 
-                val uri = Uri.parse(item.url)
-                val viewIntent = Intent(Intent.ACTION_VIEW, Uri.parse(item.url))
+                //append "sharemarks" utm campaign if there isn't a campaign already
+                val urlUtm =
+                        when {
+                            item.url?.contains(Regex("[?&]utm_source="))!! -> item.url
+                            item.url?.contains("?")!! -> item.url.plus("&").plus(utmStr)
+                            else -> item.url.plus("?").plus(utmStr)
+                        }
+
+                val uri = Uri.parse(urlUtm)
+                val viewIntent = Intent(Intent.ACTION_VIEW, uri)
                 val resInfos = context.packageManager.queryIntentActivities(viewIntent, 0)
                 val viewIntents = MarksActivity.getBrowserIntents(resInfos, uri)
 
