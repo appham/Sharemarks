@@ -15,14 +15,39 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
+
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
     testOptions {
         unitTests.returnDefaultValues = true
+    }
+
+    applicationVariants.all { variant ->
+        if (variant.getBuildType().isMinifyEnabled()) {
+            if (variant != null && variant.mappingFile != null) {
+                variant.assemble.doLast {
+                    copy {
+                        from variant.mappingFile
+                        into "${projectDir}/../proguard"
+                        rename { String fileName ->
+                            "mapping-${variant.name}-${variant.versionName}.txt"
+                        }
+                    }
+                    copy {
+                        from variant.outputs[0].outputFile
+                        into "${projectDir}/../releases"
+                        rename { String fileName ->
+                            "sharemarks-${variant.name}-${variant.versionName}.apk"
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 

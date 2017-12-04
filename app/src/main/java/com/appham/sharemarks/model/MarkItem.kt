@@ -5,12 +5,12 @@ import java.net.URL
 /**
  * @author thomas
  */
-data class MarkItem(var title: String?,
-                    var content: String?,
-                    var referrer: String?,
-                    var url: String?,
-                    var imageUrl: String?,
-                    var domain: String,
+data class MarkItem(var title: String? = "",
+                    var content: String? = "",
+                    var referrer: String? = "",
+                    var url: String? = "",
+                    var imageUrl: String? = "",
+                    var domain: String = "",
                     var deleted: Boolean = false) {
 
     var _id: Long? = null
