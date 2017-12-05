@@ -27,7 +27,14 @@ class DatabaseSQLiteHelper(val context: Context) : SQLiteOpenHelper(context, DAT
     override fun onCreate(db: SQLiteDatabase) {
         cupboard(db).createTables()
 
-        // add default items
+        // add default items: Shameless plug :-P
+        cupboard(db).put(MarkItem.create(title = "Get more apps from Thomas Fuchs-Martin",
+                content = "There are some more apps to check out in my google play portfolio. " +
+                        "Check this out or share it with your friends ;-)",
+                referrer = context.packageName,
+                url = URL("https://play.google.com/store/apps/developer?id=Thomas+Fuchs-Martin"),
+                imageUrl = URL("https://lh3.googleusercontent.com/Pj2yvhL2_XF3pki_q4aY-BdPhVvKG9cVbZIHC7oU5rf_nrg6yLv_QVHP3TKN2qSGfg=w300-rw")))
+
         cupboard(db).put(MarkItem.create(title = "GitHub - appham/Sharemarks:  Visit the open source project on github.com!",
                 content = "Sharemarks - A simple and minimalist bookmark manager app for Android. " +
                         "Bookmarks can be added via the Android share intents. Developed with Kotlin.",
@@ -35,6 +42,7 @@ class DatabaseSQLiteHelper(val context: Context) : SQLiteOpenHelper(context, DAT
                 url = URL("https://github.com/appham/Sharemarks"),
                 imageUrl = URL("https://github.com/fluidicon.png")))
 
+        // add default items: The "tutorial"
         cupboard(db).put(MarkItem.create(title = "How to use Sharemarks: ",
                 content = "1. In an external app that has an Android share feature " +
                         "(like for example Chrome Browser, Google Play Store etc.) click the share button. \n" +
@@ -44,6 +52,18 @@ class DatabaseSQLiteHelper(val context: Context) : SQLiteOpenHelper(context, DAT
                 referrer = context.packageName,
                 url = URL("https://github.com/appham/Sharemarks/blob/master/README.md"),
                 imageUrl = null))
+
+        cupboard(db).put(MarkItem.create(title = "How to delete a Sharemark: ",
+                content = "Swipe the item to the left side to delete it",
+                referrer = context.packageName,
+                url = URL("https://github.com/appham/Sharemarks/blob/master/README.md"),
+                imageUrl = URL("https://publicdomainvectors.org/tn_img/arrow-left.png")))
+
+        cupboard(db).put(MarkItem.create(title = "How to share a Sharemark: ",
+                content = "Long click or swipe right to share the item with your friends.",
+                referrer = context.packageName,
+                url = URL("https://github.com/appham/Sharemarks/blob/master/README.md"),
+                imageUrl = URL("https://publicdomainvectors.org/tn_img/long-arrow-right.png")))
 
     }
 
