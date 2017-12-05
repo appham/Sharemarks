@@ -11,7 +11,7 @@ android {
         minSdkVersion 15
         targetSdkVersion 27
         versionCode 1
-        versionName "0." + versionCode
+        versionName "1." + versionCode
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -52,8 +52,8 @@ android {
 }
 
 ext {
-    support_lib_version = "27.0.1"
-    play_services_version = "11.6.0"
+    support_lib_version = "27.0.2"
+    play_services_version = "11.6.2"
 }
 
 dependencies {
@@ -65,13 +65,13 @@ dependencies {
     implementation "com.android.support:recyclerview-v7:$support_lib_version"
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation "com.google.firebase:firebase-core:$play_services_version"
-    implementation 'com.android.support:multidex:1.0.1'
+    implementation 'com.android.support:multidex:1.0.2'
     implementation "com.jskierbi:cupboard-kotlin:+"
-    implementation 'io.reactivex.rxjava2:rxkotlin:+'
+    implementation 'io.reactivex.rxjava2:rxkotlin:2.2.0'
     implementation 'org.jsoup:jsoup:1.9.2'
-    implementation 'com.squareup.picasso:picasso:+'
-    implementation 'jp.wasabeef:picasso-transformations:+'
-    implementation 'com.squareup.okhttp:okhttp:+'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'jp.wasabeef:picasso-transformations:2.1.2'
+    implementation 'com.squareup.okhttp:okhttp:2.7.5'
 
     // cupboard-kotlin does not include cupboard itself
     implementation "nl.qbusict:cupboard:2.2.0"
@@ -88,10 +88,10 @@ dependencies {
     testImplementation "com.nhaarman:mockito-kotlin-kt1.1:1.5.0"
 
     androidTestImplementation "com.android.support:support-annotations:$support_lib_version"
-    androidTestImplementation "com.android.support.test:runner:+"
-    androidTestImplementation "com.android.support.test:rules:+"
-    androidTestImplementation "com.android.support.test.espresso:espresso-core:+"
-    androidTestImplementation "com.android.support.test.espresso:espresso-core:+"
+    androidTestImplementation "com.android.support.test:runner:1.0.1"
+    androidTestImplementation "com.android.support.test:rules:1.0.1"
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:3.0.1"
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:3.0.1"
     androidTestImplementation("com.android.support.test.espresso:espresso-contrib:+") {
         exclude group: 'com.android.support', module: 'appcompat'
         exclude group: 'com.android.support', module: 'support-v4'
