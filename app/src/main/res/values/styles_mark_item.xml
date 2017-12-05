@@ -29,7 +29,7 @@
         <item name="android:layout_height">wrap_content</item>
         <!--<item name="android:layout_alignParentLeft">true</item>-->
         <!--<item name="android:layout_below">@id/txtTitle</item>-->
-        <item name="android:padding">4dp</item>
+        <item name="android:padding">6dp</item>
     </style>
 
     <style name="TextMarkTitle">
@@ -57,8 +57,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <!--<item name="android:layout_alignParentBottom">true</item>-->
-        <item name="android:layout_below">@id/layMarkContent
-        </item>
+        <item name="android:layout_below">@id/layMarkContent</item>
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:textColor">@android:color/darker_gray</item>
         <item name="android:singleLine">true</item>

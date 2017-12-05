@@ -73,7 +73,7 @@ class MarksAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         .error(R.mipmap.ic_launcher)
                         .onlyScaleDown()
                         .centerInside()
-                        .transform(RoundedCornersTransformation(10, 10))
+                        .transform(RoundedCornersTransformation(10, 0))
                         .into(holder.imgMark)
 
                 holder.imgMark.visibility = View.VISIBLE
