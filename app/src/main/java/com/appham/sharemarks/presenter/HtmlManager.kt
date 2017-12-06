@@ -129,14 +129,6 @@ class HtmlManager {
             }
         }
 
-        // Look for any amp-img
-        imageUrl = doc.select("amp-img")?.attr("src")?.trim()
-        if (imageUrl?.isNotEmpty() == true) return getUrl(pageUrl, imageUrl)
-
-        // Look for any img
-        imageUrl = doc.select("img")?.attr("src")?.trim()
-        if (imageUrl?.isNotEmpty() == true) return getUrl(pageUrl, imageUrl)
-
         // Look for Apple touch icon declarations
         imageUrl = doc.select("link[rel='apple-touch-icon']")?.attr("href")?.trim()
         if (imageUrl?.isNotEmpty() == true) return getUrl(pageUrl, imageUrl)
@@ -148,6 +140,15 @@ class HtmlManager {
         // Look for shortcut icon link declaration
         imageUrl = doc.select("link[rel='shortcut icon']")?.attr("href")?.trim()
         if (imageUrl?.isNotEmpty() == true) return getUrl(pageUrl, imageUrl)
+
+        // Look for any amp-img
+        imageUrl = doc.select("amp-img")?.attr("src")?.trim()
+        if (imageUrl?.isNotEmpty() == true) return getUrl(pageUrl, imageUrl)
+
+        // Look for any img
+        imageUrl = doc.select("img")?.attr("src")?.trim()
+        if (imageUrl?.isNotEmpty() == true) return getUrl(pageUrl, imageUrl)
+
 
         // return favicon url
         try {
