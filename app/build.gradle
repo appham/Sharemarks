@@ -6,6 +6,7 @@ apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 27
+    buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "com.appham.sharemarks"
         minSdkVersion 15
@@ -15,18 +16,15 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
-
     buildTypes {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
     testOptions {
         unitTests.returnDefaultValues = true
     }
-
     applicationVariants.all { variant ->
         if (variant.getBuildType().isMinifyEnabled()) {
             if (variant != null && variant.mappingFile != null) {
@@ -53,7 +51,7 @@ android {
 
 ext {
     support_lib_version = "27.0.2"
-    play_services_version = "11.6.2"
+    play_services_version = "11.8.0"
 }
 
 dependencies {
@@ -66,33 +64,29 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation "com.google.firebase:firebase-core:$play_services_version"
     implementation 'com.android.support:multidex:1.0.2'
-    implementation "com.jskierbi:cupboard-kotlin:+"
+    implementation 'com.jskierbi:cupboard-kotlin:+'
+    implementation 'nl.qbusict:cupboard:2.2.0' // cupboard-kotlin does not include cupboard itself
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version" // cupboard-kotlin requires both kotlin-stdlib
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version" // and kotlin-reflect
     implementation 'io.reactivex.rxjava2:rxkotlin:2.2.0'
     implementation 'org.jsoup:jsoup:1.9.2'
     implementation 'com.squareup.picasso:picasso:2.5.2'
     implementation 'jp.wasabeef:picasso-transformations:2.1.2'
     implementation 'com.squareup.okhttp:okhttp:2.7.5'
 
-    // cupboard-kotlin does not include cupboard itself
-    implementation "nl.qbusict:cupboard:2.2.0"
-
-    // cupboard-kotlin requires both kotlin-stdlib and kotlin-reflect
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-
     debugImplementation 'im.dino:dbinspector:3.4.1@aar'
 
     testImplementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    testImplementation "junit:junit:4.12"
+    testImplementation 'junit:junit:4.12'
     testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
-    testImplementation "com.nhaarman:mockito-kotlin-kt1.1:1.5.0"
+    testImplementation 'com.nhaarman:mockito-kotlin-kt1.1:1.5.0'
 
     androidTestImplementation "com.android.support:support-annotations:$support_lib_version"
-    androidTestImplementation "com.android.support.test:runner:1.0.1"
-    androidTestImplementation "com.android.support.test:rules:1.0.1"
-    androidTestImplementation "com.android.support.test.espresso:espresso-core:3.0.1"
-    androidTestImplementation "com.android.support.test.espresso:espresso-core:3.0.1"
-    androidTestImplementation("com.android.support.test.espresso:espresso-contrib:+") {
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test:rules:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    androidTestImplementation('com.android.support.test.espresso:espresso-contrib:+') {
         exclude group: 'com.android.support', module: 'appcompat'
         exclude group: 'com.android.support', module: 'support-v4'
         exclude module: 'recyclerview-v7'
