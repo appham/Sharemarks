@@ -36,7 +36,7 @@ class MarksFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         // get recycler-list of ad results
-        marksList = view.findViewById<RecyclerView>(R.id.listMarks)
+        marksList = view.findViewById(R.id.listMarks)
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView

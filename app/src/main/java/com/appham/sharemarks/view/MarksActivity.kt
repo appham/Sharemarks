@@ -73,7 +73,7 @@ class MarksActivity : AppCompatActivity(), MarksContract.View, NavigationView.On
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeButtonEnabled(true)
 
-        navigationView = findViewById<NavigationView>(R.id.navView)
+        navigationView = findViewById(R.id.navView)
         navigationView.setNavigationItemSelectedListener(this)
         navFilter = navigationView.menu.addSubMenu(getString(R.string.filter))
         navFilter.add(getString(R.string.all)).setIcon(android.R.drawable.ic_menu_search)
