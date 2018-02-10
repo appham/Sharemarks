@@ -29,7 +29,7 @@
         android:fitsSystemWindows="true"
         android:background="@drawable/white_transparent_bg"
         tools:openDrawer="start"
-        android:layout_below="@+id/layAppBar">
+        android:layout_below="@id/layAppBar">
 
         <!--main content-->
         <android.support.constraint.ConstraintLayout
