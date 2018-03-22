@@ -50,7 +50,7 @@ class MarksAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         return MarkHolder(view)
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is MarkHolder) {
             val item = marks[position]
             holder.txtTitle.text = position.toString().plus(" - ").plus(item.title)
