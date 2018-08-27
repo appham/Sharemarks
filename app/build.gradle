@@ -78,7 +78,8 @@ dependencies {
     implementation 'com.squareup.okhttp:okhttp:2.7.5'
 
     debugImplementation 'im.dino:dbinspector:3.4.1@aar'
-//    debugImplementation 'com.appham:logkitten:+'
+
+    // Cool logcat monitoring service
     debugImplementation 'com.github.donfuxx:LogKitten:v1.1.0'
 
     testImplementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
