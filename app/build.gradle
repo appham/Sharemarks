@@ -47,6 +47,10 @@ android {
             }
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 ext {
@@ -74,6 +78,8 @@ dependencies {
     implementation 'com.squareup.okhttp:okhttp:2.7.5'
 
     debugImplementation 'im.dino:dbinspector:3.4.1@aar'
+//    debugImplementation 'com.appham:logkitten:+'
+    debugImplementation 'com.github.donfuxx:LogKitten:v1.1.0'
 
     testImplementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     testImplementation 'junit:junit:4.12'
