@@ -80,7 +80,7 @@ dependencies {
     debugImplementation 'im.dino:dbinspector:3.4.1@aar'
 
     // Cool logcat monitoring service see https://github.com/donfuxx/LogKitten
-    debugImplementation 'com.github.donfuxx:LogKitten:1.2.0'
+    debugImplementation 'com.github.donfuxx:LogKitten:1.2.1'
 
     testImplementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     testImplementation 'junit:junit:4.12'
