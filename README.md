@@ -10,4 +10,4 @@ Usage:
 3. The shared bookmark appears in the list. On click on the shared bookmark the link will be opened.
 4. Swipe left to delete the bookmark. Swipe right or long click to share it.
 
-The app can be downloaded at Google Play: https://play.google.com/store/apps/details?id=com.appham.sharemarks
+~The app can be downloaded at Google Play: https://play.google.com/store/apps/details?id=com.appham.sharemarks~  **UPDATE:** This app is no longer available in GPlay because I no longer maintain a GPlay account.
